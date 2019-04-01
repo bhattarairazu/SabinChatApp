@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="90dp">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_photo"
+        android:layout_toRightOf="@id/chk_list"
+        android:layout_width="80dp"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_user_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/manji"/>
+
+
+        <View
+            android:id="@+id/online_indicator"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="60dp"
+            android:layout_marginTop="35dp"
+            android:background="@drawable/bg_online" />
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingRight="10dp"
+        android:layout_toRightOf="@+id/rl_photo"
+        android:background="@drawable/bg_bottom_grey"
+        android:gravity="center_vertical">
+
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Manjil Nepali"
+            android:layout_marginLeft="10dp"
+            style="@style/h2"
+            android:textSize="20dp"
+            android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+
+
+</RelativeLayout>

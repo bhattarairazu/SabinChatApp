@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SabinChat</string>
+    <string name="search">Search</string>
+
+    <string name="enter_your_email_address">Enter Your Email Address</string>
+    <string name="request">Request</string>
+</resources>
