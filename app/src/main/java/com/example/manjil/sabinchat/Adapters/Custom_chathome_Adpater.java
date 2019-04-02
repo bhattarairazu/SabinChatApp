@@ -2,10 +2,13 @@ package com.example.manjil.sabinchat.Adapters;
 
 import android.content.Context;
 import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,9 +22,11 @@ import java.util.List;
  * Created by User on 3/31/2019.
  */
 
-public class Custom_chathome_Adpater extends BaseAdapter{
+public class Custom_chathome_Adpater extends BaseAdapter implements Filterable{
+    private static final String TAG = "Custom_chathome_Adpater";
     private List<Model_HomeChat> mlisthomechat = new ArrayList<>();
     private Context mgetcontext;
+    private ValueFilter mvaluefilter = new ValueFilter();
 
     public Custom_chathome_Adpater(List<Model_HomeChat> mlisthomechat, Context mgetcontext) {
         this.mlisthomechat = mlisthomechat;
@@ -67,4 +72,58 @@ public class Custom_chathome_Adpater extends BaseAdapter{
 
         return convertView;
     }
+
+    @Override
+    public Filter getFilter() {
+        if(mvaluefilter == null){
+            mvaluefilter = new ValueFilter();
+
+        }
+        return mvaluefilter;
+    }
+
+    //for filtering listivew data we use Filter class
+    private class ValueFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults mresults = new FilterResults();
+
+            //we implement here the filter logic
+            if(constraint == null || constraint.length() == 0){
+                //No filter implemented wee return all the list
+                mresults.values = mlisthomechat;
+                mresults.count = mlisthomechat.size();
+            }else{
+                //we perform filttering operations
+                List<Model_HomeChat> mhomechatlist = new ArrayList<>();
+                for(Model_HomeChat m: mlisthomechat){
+                    if(m.getName().toUpperCase().startsWith(constraint.toString().toUpperCase())){
+                        mhomechatlist.add(m);
+                    }
+
+                }
+                mresults.values = mhomechatlist;
+                mresults.count = mhomechatlist.size();
+            }
+            return mresults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            //Now we have to inform the adapter abou the new list filter
+            if(results.count == 0 ){
+                notifyDataSetInvalidated();
+            }else{
+                mlisthomechat = (List)results.values;
+                Log.d(TAG, "publishResults:mlistomechat "+mlisthomechat);
+                notifyDataSetChanged();
+
+            }
+
+        }
+
+
+    }
+
 }

@@ -25,6 +25,7 @@ public class Route {
             context.getSupportFragmentManager().beginTransaction()
 //                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .replace(frameContainer, fragment, fragmentTag)
+                    .addToBackStack(null)
                     .commit();
         }
     }

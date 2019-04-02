@@ -8,9 +8,13 @@
 
 
 
-    <include layout="@layout/toolbar_chat"/>
+    <include layout="@layout/toolbar_chat"
+        android:id="@+id/mtolbarlayout"
+        />
 
     <FrameLayout
+        android:layout_below="@+id/mtolbarlayout"
+        android:layout_above="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container"/>
