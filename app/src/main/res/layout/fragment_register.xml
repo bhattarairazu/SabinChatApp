@@ -2,7 +2,7 @@
 <LinearLayout android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="25dp"
+    android:layout_marginTop="0dp"
     android:orientation="vertical"
     android:layout_alignParentBottom="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
@@ -15,13 +15,13 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/roundwhite">
 
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/email"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"/>
+            <!--<ImageView-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/email"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="10dp"/>-->
 
 
             <custom_font.MyEditText
@@ -48,13 +48,13 @@
             android:background="@drawable/roundwhite"
             android:layout_marginTop="10dp">
 
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/password"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"/>
+            <!--<ImageView-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/password"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="10dp"/>-->
             <custom_font.MyEditText
                 android:id="@+id/username"
                 android:layout_weight="1"
@@ -80,15 +80,15 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp">
 
-            <ImageView
-                android:id="@+id/pass"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/password"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                />
+            <!--<ImageView-->
+                <!--android:id="@+id/pass"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/password"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--/>-->
 
 
             <custom_font.MyEditText
@@ -120,15 +120,15 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp">
 
-            <ImageView
-                android:id="@+id/confirm_pass"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/password"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                />
+            <!--<ImageView-->
+                <!--android:id="@+id/confirm_pass"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/password"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--/>-->
 
 
             <custom_font.MyEditText

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.manjil.sabinchat.Fragment.Chat_Profile;
@@ -15,9 +16,12 @@ import com.example.manjil.sabinchat.Fragment.ListOfPeople;
 import com.example.manjil.sabinchat.Fragment.Settingfragment;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.Constants.Route;
+import com.example.manjil.sabinchat.Title_Text_Listeners;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Title_Text_Listeners {
+    private static final String TAG = "MainActivity";
     Context mContext;
+    private TextView mtextviewtitle;
 
 
 
@@ -55,10 +59,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 //        BottomNavigationViewHelper.disableShiftMode(bottom_navigation);
-
+        initview();
         mContext = this;
         if( savedInstanceState == null )
             changeFragment(new Chat_Profile());
+    }
+    public void initview(){
+        mtextviewtitle =(TextView) findViewById(R.id.mtextview_activitytitle);
     }
     @Override
     public void onBackPressed() {
@@ -79,6 +86,12 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack("fragment")
                 .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+    }
+
+    @Override
+    public void settitle(String title) {
+        mtextviewtitle.setText(title);
+
     }
 }
 

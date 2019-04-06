@@ -17,6 +17,7 @@
         android:padding="10dp">
 
         <EditText
+            android:id="@+id/meditext_peoplelist_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="17.3dp"
@@ -28,6 +29,7 @@
             android:textSize="15dp" />
 
         <ImageView
+            android:id="@+id/msearchview_listpeoplesearch"
             android:layout_width="wrap_content"
             android:layout_height="13dp"
             android:layout_gravity="center"

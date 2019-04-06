@@ -1,13 +1,19 @@
 package com.example.manjil.sabinchat.Adapters;
 
 import android.content.Context;
+import android.provider.Contacts;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.manjil.sabinchat.Fragment.ListOfPeople;
+import com.example.manjil.sabinchat.Model.Model_HomeChat;
 import com.example.manjil.sabinchat.Model.PeopleListModel;
 import com.example.manjil.sabinchat.R;
 
@@ -20,9 +26,11 @@ import java.util.List;
  * Created by User on 3/31/2019.
  */
 
-public class ListOfPeople_Adpater extends BaseAdapter{
+public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
+    private static final String TAG = "ListOfPeople_Adpater";
     private List<PeopleListModel> mpeople_list = new ArrayList<>();
     private Context mcontext;
+    private ValueFilter mfilters = new ValueFilter();
     //constructor
 
     public ListOfPeople_Adpater(List<PeopleListModel> mpeople_list, Context mcontext) {
@@ -59,5 +67,57 @@ public class ListOfPeople_Adpater extends BaseAdapter{
         //setting data to respective view
         mlistpeope.setText(mgetsingleitems.getName());
         return convertView;
+    }
+
+    @Override
+    public Filter getFilter() {
+        if(mfilters == null){
+            mfilters = new ValueFilter();
+        }
+        return mfilters;
+    }
+
+    //for filtering listivew data we use Filter class
+    private class ValueFilter extends Filter {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            FilterResults mresults = new FilterResults();
+
+            //we implement here the filter logic
+            if(constraint == null || constraint.length() == 0){
+                //No filter implemented wee return all the list
+                mresults.values = mpeople_list;
+                mresults.count = mpeople_list.size();
+            }else{
+                //we perform filttering operations
+                List<PeopleListModel> mpeoplechatlists = new ArrayList<>();
+                for(PeopleListModel m: mpeople_list){
+                    if(m.getName().toUpperCase().startsWith(constraint.toString().toUpperCase())){
+                        mpeoplechatlists.add(m);
+                    }
+
+                }
+                mresults.values = mpeoplechatlists;
+                mresults.count = mpeoplechatlists.size();
+            }
+            return mresults;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            //Now we have to inform the adapter abou the new list filter
+            if(results.count == 0 ){
+                notifyDataSetInvalidated();
+            }else{
+                mpeople_list = (List)results.values;
+                Log.d(TAG, "publishResults:mlistomechat "+mpeople_list);
+                notifyDataSetChanged();
+
+            }
+
+        }
+
+
     }
 }

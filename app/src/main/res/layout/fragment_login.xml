@@ -21,7 +21,7 @@
         <!--android:textSize="40dp" />-->
 
     <LinearLayout
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -36,13 +36,13 @@
             android:layout_marginRight="30dp"
             android:background="@drawable/roundwhite">
 
-            <ImageView
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/username"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"/>
+            <!--<ImageView-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/username"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="10dp"/>-->
 
             <custom_font.MyEditText
                 android:id="@+id/username"
@@ -69,15 +69,15 @@
             android:layout_marginRight="30dp"
             android:layout_marginTop="10dp">
 
-            <ImageView
-                android:id="@+id/pass"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:src="@drawable/password"
-                android:layout_weight="1"
-                android:layout_gravity="center"
-                android:paddingLeft="10dp"
-                />
+            <!--<ImageView-->
+                <!--android:id="@+id/pass"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@drawable/password"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:paddingLeft="10dp"-->
+                <!--/>-->
 
 
             <custom_font.MyEditText

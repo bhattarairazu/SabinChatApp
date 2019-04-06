@@ -1,5 +1,8 @@
 package com.example.manjil.sabinchat.Fragment;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +23,7 @@ import com.example.manjil.sabinchat.Activity.SingleChat;
 import com.example.manjil.sabinchat.Adapters.Custom_chathome_Adpater;
 import com.example.manjil.sabinchat.Model.Model_HomeChat;
 import com.example.manjil.sabinchat.R;
+import com.example.manjil.sabinchat.Title_Text_Listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +45,16 @@ public class Chat_Profile extends Fragment {
     private List<Model_HomeChat> mhomechatlisst = new ArrayList<>();
     private Custom_chathome_Adpater madpters;
     private ImageView searchimageview;
+    //initilizatin interface
+    private Title_Text_Listeners mlisteners;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mlisteners =(Title_Text_Listeners) context;
+        mlisteners.settitle("Chat");
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -83,6 +97,17 @@ public class Chat_Profile extends Fragment {
             }
         });
 
+        //delete on long clicklisteners on listview
+        mlistviews.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                int positions = position;
+                long ids = id;
+                onconfirm_dialogue(position,ids);
+                return true;
+            }
+        });
+
     }
     public void onclicklisteners(){
         //ediitext filter onlcick listenrs
@@ -116,5 +141,20 @@ public class Chat_Profile extends Fragment {
 
             }
         });
+    }
+    //confirmation dialog for deleting or not
+    public void onconfirm_dialogue(final int pos, long id){
+        new AlertDialog.Builder(getContext())
+                .setTitle("Delete")
+                .setMessage("Are You Sure You Want to Delete This Conversation ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mhomechatlisst.remove(pos);
+                        madpters.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("No",null)
+                .show();
     }
 }
