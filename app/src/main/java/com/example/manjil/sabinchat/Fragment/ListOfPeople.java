@@ -35,6 +35,7 @@ import java.util.List;
 public class ListOfPeople extends Fragment {
     private static final String TAG = "ListOfPeople";
     private String [] mlistnames = {"Manjil","Razu","Diwas","Hari","Shyam","Geeta","Sita","Lakshman"};
+    private int [] user_id = {1,2,3,4,5,6,7,8};
     private ListView mlistview_people;
     private List<PeopleListModel> mlist = new ArrayList<>();
     private EditText meditextsearch;
@@ -79,6 +80,7 @@ public class ListOfPeople extends Fragment {
         for(int i = 0;i<mlistnames.length;i++){
             PeopleListModel mlistmodels = new PeopleListModel();
             mlistmodels.setName(mlistnames[i]);
+            mlistmodels.setUser_id(user_id[i]);
             mlist.add(mlistmodels);
         }
         mpoepolelisadapter = new ListOfPeople_Adpater(mlist,getContext());
@@ -88,9 +90,11 @@ public class ListOfPeople extends Fragment {
         mlistview_people.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String names = parent.getItemAtPosition(position).toString();
+                //String names = parent.getItemAtPosition(position).toString();
+                String names = mlist.get(position).getName();
+                int userids = mlist.get(position).getUser_id();
                 Log.d(TAG, "onItemClick: names of respected list items"+names);
-                startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names));
+                startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names).putExtra("userid",userids));
             }
         });
 

@@ -7,13 +7,15 @@ package com.example.manjil.sabinchat.Model;
 public class PeopleListModel {
     private String name;
     private String images;
+    private int user_id;
 
     public PeopleListModel() {
     }
 
-    public PeopleListModel(String name, String images) {
+    public PeopleListModel(String name, String images, int user_id) {
         this.name = name;
         this.images = images;
+        this.user_id = user_id;
     }
 
     public String getName() {
@@ -30,5 +32,13 @@ public class PeopleListModel {
 
     public void setImages(String images) {
         this.images = images;
+    }
+
+    public int getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
 }

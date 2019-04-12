@@ -40,6 +40,8 @@
     <ListView
         android:layout_width="match_parent"
         android:id="@+id/mlistview_activeusers"
+        android:dividerHeight="0dp"
+        android:divider="@null"
         android:layout_height="match_parent">
 
     </ListView>

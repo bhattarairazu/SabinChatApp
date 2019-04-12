@@ -41,6 +41,7 @@
 
 
             <TextView
+                android:id="@+id/muser_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Manjil Nepali"
@@ -58,115 +59,44 @@
 
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/linear_profile"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:textColor="#98a9b7"
-            android:text="January 18" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="bottom"
-                android:layout_marginLeft="20dp"
-                android:src="@drawable/manji" />
-
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/round_grey"
-                android:orientation="vertical"
-                android:padding="10dp">
+<ListView
+    android:layout_width="match_parent"
+    android:divider="@null"
+    android:dividerHeight="0dp"
+    android:layout_below="@+id/linear_profile"
+    android:layout_height="match_parent"
+    android:id="@+id/mlsitview_listmessages_single"
+    android:layout_above="@+id/rl_bottom"
+    ></ListView>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@+id/linear_profile"-->
+        <!--android:orientation="vertical">-->
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="05dp"
-                    android:textColor="#616e7f"
-                    android:text="Hi, there" />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="20dp"-->
+            <!--android:textColor="#98a9b7"-->
+            <!--android:text="January 18" />-->
 
+        <!---->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:textColor="#616e7f"
-                    android:text="Do you need help with pricing ?" />
-            </LinearLayout>
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="30dp"-->
+            <!--android:text="January 18"-->
+            <!--android:textColor="#98a9b7"-->
+            <!--android:id="@+id/myTextView_Roboto_Regular" />-->
 
+       <!---->
 
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"
-            android:text="January 18"
-            android:textColor="#98a9b7"
-            android:id="@+id/myTextView_Roboto_Regular" />
-
-        <LinearLayout
-            android:layout_marginTop="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:orientation="vertical"
-            android:gravity="right">
-
-            <LinearLayout
-                android:layout_width="200dp"
-                android:layout_height="100dp"
-                android:layout_marginLeft="10dp"
-                android:background="@drawable/round_blue"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="05dp"
-                    android:text="Hi, there"
-                    android:textColor="#fff" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="Do you need help with pricing ?"
-                    android:textColor="#fff" />
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="10dp"
-                android:textColor="#98a9b7"
-                android:text="just now. Seen"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
     <RelativeLayout
         android:id="@+id/rl_bottom"
@@ -201,20 +131,19 @@
             android:background="@drawable/bg_white_rounded"
             android:layout_centerVertical="true">
 
-            <ImageButton
-                android:id="@+id/bt_attachment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/ic_attachment"
-                android:padding="10dp"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent"
-                android:layout_centerVertical="true"/>
+            <!--<ImageButton-->
+                <!--android:id="@+id/bt_attachment"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:srcCompat="@drawable/ic_attachment"-->
+                <!--android:padding="10dp"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:background="@android:color/transparent"-->
+                <!--android:layout_centerVertical="true"/>-->
             <EditText
-                android:id="@+id/et_message"
+                android:id="@+id/send_message_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/bt_attachment"
                 android:padding="15dp"
                 android:hint="Enter your message"
                 android:maxLines="3"
