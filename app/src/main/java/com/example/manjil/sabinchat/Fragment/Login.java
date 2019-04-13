@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.manjil.sabinchat.Activity.MainActivity;
+import com.example.manjil.sabinchat.Constants.SharedPreference;
 import com.example.manjil.sabinchat.Model.UserSignup;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.RestApi.ApiClient;
@@ -103,6 +104,7 @@ public class Login extends Fragment {
                         status = response.body().getResults().getStatus();
                         if(status){
                             mdialog.dismiss();
+                            SharedPreference.user_ids = response.body().getResults().getUserId();
                             startActivity(new Intent(getContext(), MainActivity.class));
                         }else{
                             mdialog.dismiss();

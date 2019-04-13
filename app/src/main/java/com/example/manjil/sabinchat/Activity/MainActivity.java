@@ -69,12 +69,13 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
     }
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount()>0){
+        if(getSupportFragmentManager().getBackStackEntryCount()>1){
             getSupportFragmentManager().popBackStack();
         }else{
             // alerdialog_exit("Are You Sure You Want to Exit ? ",0);
            // showDialog(MainActivity.this, "Are You Sure You Want to Exit ? ",0);
-            Toast.makeText(mContext, "Press Again To Exit", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mContext, "Press Again To Exit", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
     }

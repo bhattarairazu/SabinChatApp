@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.manjil.sabinchat.Adapters.Custom_SingleMessage_Adapter;
+import com.example.manjil.sabinchat.Constants.SharedPreference;
 import com.example.manjil.sabinchat.Model.Model_Message_Singleitems;
 import com.example.manjil.sabinchat.Model.Model_messagelist;
 import com.example.manjil.sabinchat.Model.Model_sendingmessage;
@@ -90,7 +91,7 @@ public class SingleChat extends AppCompatActivity{
         }
         public void getmessage_fromserver(){
                 minterface =ApiClient.getAPICLIENT().create(RetroInterface.class);
-            Call<Model_messagelist> mgetlist = minterface.mgetmessagelist(10,8);
+            Call<Model_messagelist> mgetlist = minterface.mgetmessagelist(SharedPreference.user_ids,userids);
             mgetlist.enqueue(new Callback<Model_messagelist>() {
                 @Override
                 public void onResponse(Call<Model_messagelist> call, Response<Model_messagelist> response) {
@@ -103,7 +104,7 @@ public class SingleChat extends AppCompatActivity{
                                 Model_sendingmessage mmessage_single = new Model_sendingmessage(message,from_id,to_id,time);
                                 mlistmodel.add(mmessage_single);
                         }
-                        mlisview_messagse.setAdapter(new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,10));
+                        mlisview_messagse.setAdapter(new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids));
                     }
                 }
 
@@ -127,12 +128,12 @@ public class SingleChat extends AppCompatActivity{
                 @Override
                 public void onClick(View v) {
                     messages = meditext_typemessage.getText().toString();
-                   Model_sendingmessage msend = new Model_sendingmessage(messages,10,8,"3 hrs");
+                   Model_sendingmessage msend = new Model_sendingmessage(messages,SharedPreference.user_ids,userids,"3 hrs");
                    mlistmodel.add(msend);
-                    madapter = new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,10);
+                    madapter = new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids);
                     mlisview_messagse.setAdapter(madapter);
                     madapter.notifyDataSetChanged();
-                    sendmessage_toserver(messages,10,8);
+                    sendmessage_toserver(messages,SharedPreference.user_ids,userids);
 
 
                 }

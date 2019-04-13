@@ -39,6 +39,8 @@ public class Chat_Profile extends Fragment {
     private boolean [] onlinesatus = {true,false,false,true,true,false,true,false};
     private String [] dates ={"6:45 AM","5:41 am","6:45 AM","7:56 PM","6:45 AM","5:41 am","6:45 AM","7:56 PM"};
     private int [] totlamessages = {5,8,12,4,3,6,1,2};
+    private int [] user_id = {1,2,3,4,5,6,7,8};
+
     //setarch edit text
     private EditText msearacheditext;
     private ListView mlistviews;
@@ -82,6 +84,7 @@ public class Chat_Profile extends Fragment {
             mhome.setLast_message(lastunseen_messages[j]);
             mhome.setOnline_status(onlinesatus[j]);
             mhome.setNo_of_unseenmessages(totlamessages[j]);
+            mhome.setUserids(user_id[j]);
             mhomechatlisst.add(mhome);
 
         }
@@ -91,9 +94,11 @@ public class Chat_Profile extends Fragment {
         mlistviews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String names = parent.getItemAtPosition(position).toString();
+                //String names = parent.getItemAtPosition(position).toString();
+                String names = mhomechatlisst.get(position).getName();
+                int userids = mhomechatlisst.get(position).getUserids();
                 Log.d(TAG, "onItemClick: names of respected list items"+names);
-                startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names));
+                startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names).putExtra("userid",userids));
             }
         });
 

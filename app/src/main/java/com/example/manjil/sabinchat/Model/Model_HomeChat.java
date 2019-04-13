@@ -11,6 +11,7 @@ public class Model_HomeChat {
     private String image;
     private int no_of_unseenmessages;
     private boolean online_status;
+    private int userids;
 
 
 
@@ -65,6 +66,14 @@ public class Model_HomeChat {
 
     public void setNo_of_unseenmessages(int no_of_unseenmessages) {
         this.no_of_unseenmessages = no_of_unseenmessages;
+    }
+
+    public int getUserids() {
+        return userids;
+    }
+
+    public void setUserids(int userids) {
+        this.userids = userids;
     }
 
     public boolean isOnline_status() {
