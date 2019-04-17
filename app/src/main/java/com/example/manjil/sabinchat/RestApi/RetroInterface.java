@@ -2,6 +2,7 @@ package com.example.manjil.sabinchat.RestApi;
 
 import com.example.manjil.sabinchat.Model.Model_messagelist;
 import com.example.manjil.sabinchat.Model.UserSignup;
+import com.example.manjil.sabinchat.Model.user_list.Userlists;
 
 import org.json.JSONObject;
 
@@ -33,6 +34,14 @@ public interface RetroInterface {
     @FormUrlEncoded
     @POST("send")
     Call<UserSignup> msend_singlemessage(@Field("message") String message,@Field("from_id") int from_id,@Field("to_id") int to_id);
+    //getting all users
+    @GET("user/all")
+    Call<Userlists> mgetuser_list();
+
+    //updating user status
+    @GET("user/update/status/{user_id}/{status}")
+    Call<UserSignup> mupdate_user(@Path("user_id") int user_id,@Path("status") int status);
+
 
 
 

@@ -18,17 +18,25 @@
             android:layout_marginLeft="10dp"
             android:background="@drawable/round_blue"
             android:orientation="vertical"
-            android:padding="10dp">
+            >
 
 
             <TextView
                 android:id="@+id/mtextview_tomessages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="05dp"
+                android:layout_margin="05dp"
                 android:text="Hi, there"
                 android:textColor="#fff" />
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_height="180dp"
+                android:layout_margin="1dp"
+                android:visibility="gone"
+                android:id="@+id/miageview_imageto"
+                />
 
             <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->

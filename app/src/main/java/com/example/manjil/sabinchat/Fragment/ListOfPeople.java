@@ -13,20 +13,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.manjil.sabinchat.Activity.SingleChat;
-import com.example.manjil.sabinchat.Adapters.Custom_chathome_Adpater;
 import com.example.manjil.sabinchat.Adapters.ListOfPeople_Adpater;
 import com.example.manjil.sabinchat.Model.PeopleListModel;
+import com.example.manjil.sabinchat.Model.user_list.Resultss;
+import com.example.manjil.sabinchat.Model.user_list.Userlists;
 import com.example.manjil.sabinchat.R;
-import com.example.manjil.sabinchat.Title_Text_Listeners;
+import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
+import com.example.manjil.sabinchat.RestApi.ApiClient;
+import com.example.manjil.sabinchat.RestApi.RetroInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by User on 3/31/2019.
@@ -34,16 +40,17 @@ import java.util.List;
 
 public class ListOfPeople extends Fragment {
     private static final String TAG = "ListOfPeople";
-    private String [] mlistnames = {"Manjil","Razu","Diwas","Hari","Shyam","Geeta","Sita","Lakshman"};
-    private int [] user_id = {1,2,3,4,5,6,7,8};
     private ListView mlistview_people;
-    private List<PeopleListModel> mlist = new ArrayList<>();
     private EditText meditextsearch;
     private ImageView mimageviewsearch;
     //initilization adapter
     private ListOfPeople_Adpater mpoepolelisadapter;
     //initilize interface
     Title_Text_Listeners mlisteners;
+    //retrofit interface
+    RetroInterface minterface;
+    //getting userlist model data
+    List<Resultss> mgetlist = new ArrayList<>();
 
     @Override
     public void onAttach(Context context) {
@@ -61,6 +68,8 @@ public class ListOfPeople extends Fragment {
 
 
         initview(mview);
+        //getting users list
+        get_userslist();
         //initiliziting adapters
         loadadapterdatas();
         //set on click listeners
@@ -77,29 +86,20 @@ public class ListOfPeople extends Fragment {
         mlistview_people =(ListView) miews.findViewById(R.id.mlistview_activeusers);
     }
     public void loadadapterdatas(){
-        for(int i = 0;i<mlistnames.length;i++){
-            PeopleListModel mlistmodels = new PeopleListModel();
-            mlistmodels.setName(mlistnames[i]);
-            mlistmodels.setUser_id(user_id[i]);
-            mlist.add(mlistmodels);
-        }
-        mpoepolelisadapter = new ListOfPeople_Adpater(mlist,getContext());
+//        for(int i = 0;i<mlistnames.length;i++){
+//            PeopleListModel mlistmodels = new PeopleListModel();
+//            mlistmodels.setName(mlistnames[i]);
+//            mlistmodels.setUser_id(user_id[i]);
+//            mlist.add(mlistmodels);
+//        }
+//        mpoepolelisadapter = new ListOfPeople_Adpater(mlist,getContext());
+//
+//        mlistview_people.setAdapter(mpoepolelisadapter);
 
-        mlistview_people.setAdapter(mpoepolelisadapter);
-        //listview setonclick listeners
-        mlistview_people.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //String names = parent.getItemAtPosition(position).toString();
-                String names = mlist.get(position).getName();
-                int userids = mlist.get(position).getUser_id();
-                Log.d(TAG, "onItemClick: names of respected list items"+names);
-                startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names).putExtra("userid",userids));
-            }
-        });
 
     }
     public void onclickslisteners(){
+        //edittext search view
         meditextsearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -111,9 +111,10 @@ public class ListOfPeople extends Fragment {
                     public void onClick(View v) {
                         meditextsearch.setText("");
                         mimageviewsearch.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
-                        mpoepolelisadapter = new ListOfPeople_Adpater(mlist,getContext());
+                        mpoepolelisadapter = new ListOfPeople_Adpater(mgetlist,getContext());
                         mlistview_people.setAdapter(mpoepolelisadapter);
                         mpoepolelisadapter.notifyDataSetChanged();
+
                     }
                 });
             }
@@ -125,6 +126,51 @@ public class ListOfPeople extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+        //listview setonclick listeners
+        mlistview_people.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //String names = parent.getItemAtPosition(position).toString();
+                String names = mgetlist.get(position).getUsername();
+                int userids = mgetlist.get(position).getId();
+                Log.d(TAG, "onItemClick: names of respected list items"+names);
+                startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names).putExtra("userid",userids));
+            }
+        });
+
+    }
+    //getting all users data
+    public void get_userslist(){
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<Userlists> mgetlist_user = minterface.mgetuser_list();
+        mgetlist_user.enqueue(new Callback<Userlists>() {
+            @Override
+            public void onResponse(Call<Userlists> call, Response<Userlists> response) {
+                if(response.isSuccessful()){
+                    if(response.code()==200){
+                        for(int i =0;i<response.body().getResults().size();i++){
+                            Resultss mresult = new Resultss();
+                            mresult.setId(response.body().getResults().get(i).getId());
+                            mresult.setName(response.body().getResults().get(i).getName());
+                            mresult.setPicture(response.body().getResults().get(i).getPicture());
+                            mresult.setStatus(response.body().getResults().get(i).getStatus());
+                            mresult.setUsername(response.body().getResults().get(i).getUsername());
+                            mgetlist.add(mresult);
+
+                        }
+                        mpoepolelisadapter = new ListOfPeople_Adpater(mgetlist,getContext());
+                        mlistview_people.setAdapter(mpoepolelisadapter);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Userlists> call, Throwable t) {
+                Log.d(TAG, "onFailure: failed"+t.toString());
 
             }
         });

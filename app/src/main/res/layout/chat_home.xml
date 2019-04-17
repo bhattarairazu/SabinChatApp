@@ -124,22 +124,22 @@
             android:layout_alignParentRight="true"
             android:stateListAnimator="@null"
             android:layout_centerInParent="true"/>
+        <ImageView
+            android:id="@+id/bt_attachment"
+            android:layout_width="30dp"
+            android:layout_height="20dp"
+            android:padding="10dp"
+            android:layout_toLeftOf="@+id/bt_send"
+            android:background="@drawable/ic_attachment"
+            android:layout_centerVertical="true"/>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/bt_send"
+            android:layout_toLeftOf="@id/bt_attachment"
             android:background="@drawable/bg_white_rounded"
             android:layout_centerVertical="true">
 
-            <!--<ImageButton-->
-                <!--android:id="@+id/bt_attachment"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:srcCompat="@drawable/ic_attachment"-->
-                <!--android:padding="10dp"-->
-                <!--android:layout_alignParentRight="true"-->
-                <!--android:background="@android:color/transparent"-->
-                <!--android:layout_centerVertical="true"/>-->
+
             <EditText
                 android:id="@+id/send_message_edittext"
                 android:layout_width="match_parent"

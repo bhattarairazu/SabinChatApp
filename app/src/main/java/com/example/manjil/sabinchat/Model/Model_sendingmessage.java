@@ -1,16 +1,59 @@
 package com.example.manjil.sabinchat.Model;
 
+import android.net.Uri;
+
+import java.net.URI;
+
 public class Model_sendingmessage {
     private String message;
     private int from_id;
     private int to_id;
     private String time;
+    private Uri muri;
+    private String picture;
+
+
+    public Model_sendingmessage() {
+    }
+
+    public Model_sendingmessage(String message, int from_id, int to_id, String time, Uri muri) {
+        this.message = message;
+        this.from_id = from_id;
+        this.to_id = to_id;
+        this.time = time;
+        this.muri = muri;
+    }
+
+    public Model_sendingmessage(String message, int from_id, int to_id, String time, Uri muri, String picture) {
+        this.message = message;
+        this.from_id = from_id;
+        this.to_id = to_id;
+        this.time = time;
+        this.muri = muri;
+        this.picture = picture;
+    }
 
     public Model_sendingmessage(String message, int from_id, int to_id, String time) {
         this.message = message;
         this.from_id = from_id;
         this.to_id = to_id;
         this.time = time;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
+    }
+
+    public Uri getMuri() {
+        return muri;
+    }
+
+    public void setMuri(Uri muri) {
+        this.muri = muri;
     }
 
     public String getMessage() {

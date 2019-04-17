@@ -1,5 +1,8 @@
 package com.example.manjil.sabinchat.Activity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -49,6 +53,10 @@ public class SingleChat extends AppCompatActivity{
     private String messages;
     private List<Model_sendingmessage> mlistmodel = new ArrayList<>();
     private RetroInterface minterface;
+    private ImageView mbtn_sendimagebtn;
+    private static final int GALLERY_REQUEST_CODE = 100;
+    Uri selectedImage;
+    boolean sendimage = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +79,8 @@ public class SingleChat extends AppCompatActivity{
         }
 
         public void initviews(){
+        //image button
+             mbtn_sendimagebtn =(ImageView) findViewById(R.id.bt_attachment);
         //listview
             mlisview_messagse =(ListView) findViewById(R.id.mlsitview_listmessages_single);
         //typing message edittext
@@ -101,7 +111,8 @@ public class SingleChat extends AppCompatActivity{
                                 int from_id = response.body().getResults().get(i).getFrom_id();
                                 int to_id = response.body().getResults().get(i).getTo_id();
                                 String time = response.body().getResults().get(i).getTime();
-                                Model_sendingmessage mmessage_single = new Model_sendingmessage(message,from_id,to_id,time);
+                                String pictures = response.body().getResults().get(i).getPicture();
+                                Model_sendingmessage mmessage_single = new Model_sendingmessage(message,from_id,to_id,time,selectedImage,pictures);
                                 mlistmodel.add(mmessage_single);
                         }
                         mlisview_messagse.setAdapter(new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids));
@@ -117,6 +128,15 @@ public class SingleChat extends AppCompatActivity{
         }
         //setting click listners
         public void setonclicklisteners(){
+        //mimage button set on click listnersn
+
+            mbtn_sendimagebtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    pickFromGallery();
+                }
+            });
+
             mbtnback_imagevviews.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,14 +147,34 @@ public class SingleChat extends AppCompatActivity{
             mbtn_sends.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    messages = meditext_typemessage.getText().toString();
-                   Model_sendingmessage msend = new Model_sendingmessage(messages,SharedPreference.user_ids,userids,"3 hrs");
-                   mlistmodel.add(msend);
-                    madapter = new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids);
-                    mlisview_messagse.setAdapter(madapter);
-                    madapter.notifyDataSetChanged();
-                    sendmessage_toserver(messages,SharedPreference.user_ids,userids);
 
+                    //checking whether the user has selected image or not
+                    //if user has selected image than image is send to the server else not
+                    if(sendimage) {
+                        Log.d(TAG, "onClick: image urls"+selectedImage);
+                        messages = meditext_typemessage.getText().toString();
+                        Model_sendingmessage msend = new Model_sendingmessage();
+                        msend.setMessage(messages);
+                        msend.setFrom_id(SharedPreference.user_ids);
+                        msend.setTo_id(userids);
+                        msend.setMuri(selectedImage);
+                        mlistmodel.add(msend);
+                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
+                        mlisview_messagse.setAdapter(madapter);
+                        madapter.notifyDataSetChanged();
+                        sendmessage_toserver(messages, SharedPreference.user_ids, userids);
+                        sendimage = false;
+
+                    }else{
+                        messages = meditext_typemessage.getText().toString();
+                        Model_sendingmessage msend = new Model_sendingmessage(messages, SharedPreference.user_ids, userids, "3 hrs");
+                        mlistmodel.add(msend);
+                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
+                        mlisview_messagse.setAdapter(madapter);
+                        madapter.notifyDataSetChanged();
+                        sendmessage_toserver(messages, SharedPreference.user_ids, userids);
+                    }
+                    meditext_typemessage.setText("");
 
                 }
             });
@@ -163,5 +203,31 @@ public class SingleChat extends AppCompatActivity{
             }
         });
     }
+    //pick image from gallery
+    private void pickFromGallery(){
+        //Create an Intent with action as ACTION_PICK
+        Intent intent=new Intent(Intent.ACTION_PICK);
+        // Sets the type as image/*. This ensures only components of type image are selected
+        intent.setType("image/*");
+        //We pass an extra array with the accepted mime types. This will ensure only components with these MIME types as targeted.
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES,mimeTypes);
+        // Launching the Intent
+        startActivityForResult(intent,GALLERY_REQUEST_CODE);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data){
+        // Result code is RESULT_OK only if the user selects an Image
+        if (resultCode == Activity.RESULT_OK)
+            switch (requestCode){
+                case GALLERY_REQUEST_CODE:
+                    sendimage = true;
+                    //data.getData returns the content URI for the selected Image
+                   selectedImage = data.getData();
+                    meditext_typemessage.setHint("Image Selected");
+                    //imageView.setImageURI(selectedImage);
+                    break;
+            }
+    }
 }
