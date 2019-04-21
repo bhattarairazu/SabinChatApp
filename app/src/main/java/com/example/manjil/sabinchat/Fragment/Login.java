@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import retrofit2.Response;
  */
 
 public class Login extends Fragment {
+    private static final String TAG = "Login";
     private TextView mtextview_createaccounts,mtextview_forgotpasswords;
     private TextView mgetstarted;
     private EditText meditext_uname,meditext_password;
@@ -103,6 +105,28 @@ public class Login extends Fragment {
                     if(response.code()==200 && response.message().equals("OK")){
                         status = response.body().getResults().getStatus();
                         if(status){
+                            //updating user online status
+                            //setting online status to true when user is logged in
+                            Call<UserSignup> mcall = minterface.mupdate_user(response.body().getResults().getUserId(),1);
+                            mcall.enqueue(new Callback<UserSignup>() {
+                                @Override
+                                public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                                        if(response.isSuccessful()){
+                                            if(response.body().getResults().getStatus()){
+                                                Log.d(TAG, "onResponse: user status updated successfully");
+
+                                            }
+                                            }
+                                }
+
+                                @Override
+                                public void onFailure(Call<UserSignup> call, Throwable t) {
+                                    Log.d(TAG, "onFailure: user status update failed"+t.toString());
+
+                                }
+                            });
+
+
                             mdialog.dismiss();
                             SharedPreference.user_ids = response.body().getResults().getUserId();
                             startActivity(new Intent(getContext(), MainActivity.class));
@@ -117,7 +141,7 @@ public class Login extends Fragment {
 
             @Override
             public void onFailure(Call<UserSignup> call, Throwable t) {
-
+                Log.d(TAG, "onFailure: "+t.toString());
             }
         });
 

@@ -22,9 +22,9 @@
 
 
         <View
-            android:id="@+id/online_indicator"
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:id="@+id/online_indicators"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="35dp"
             android:background="@drawable/bg_online" />
@@ -51,6 +51,7 @@
             style="@style/h2"
             android:textSize="20dp"
             android:layout_gravity="center_vertical"/>
+
     </LinearLayout>
 
 

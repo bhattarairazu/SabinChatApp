@@ -11,13 +11,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.manjil.sabinchat.Activity.LoginSignupActivity;
 import com.example.manjil.sabinchat.R;
-import com.example.manjil.sabinchat.Title_Text_Listeners;
+import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 
 /**
  * Created by User on 3/31/2019.

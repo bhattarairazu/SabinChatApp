@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.manjil.sabinchat.Fragment.ListOfPeople;
 import com.example.manjil.sabinchat.Model.Model_HomeChat;
 import com.example.manjil.sabinchat.Model.PeopleListModel;
+import com.example.manjil.sabinchat.Model.user_list.Resultss;
 import com.example.manjil.sabinchat.R;
 
 import org.w3c.dom.Text;
@@ -28,12 +29,12 @@ import java.util.List;
 
 public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
     private static final String TAG = "ListOfPeople_Adpater";
-    private List<PeopleListModel> mpeople_list = new ArrayList<>();
+    private List<Resultss> mpeople_list = new ArrayList<>();
     private Context mcontext;
     private ValueFilter mfilters = new ValueFilter();
     //constructor
 
-    public ListOfPeople_Adpater(List<PeopleListModel> mpeople_list, Context mcontext) {
+    public ListOfPeople_Adpater(List<Resultss> mpeople_list, Context mcontext) {
         this.mpeople_list = mpeople_list;
         this.mcontext = mcontext;
     }
@@ -59,13 +60,20 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_people,parent,false);
         }
         //getting current item to be displayes
-        PeopleListModel mgetsingleitems = mpeople_list.get(position);
+        Resultss mgetsingleitems = mpeople_list.get(position);
         //initilizing textview and image views
+        View mview = (View) convertView.findViewById(R.id.online_indicators);
         TextView mlistpeope = (TextView) convertView.findViewById(R.id.tv_user_name);
         ImageView mimageiewpeople =(ImageView) convertView.findViewById(R.id.iv_user_photo);
+         if(mgetsingleitems.getStatus()==1){
+            mview.setVisibility(View.VISIBLE);
 
-        //setting data to respective view
-        mlistpeope.setText(mgetsingleitems.getName());
+             //setting data to respective view
+             mlistpeope.setText(mgetsingleitems.getUsername());
+
+         }else{
+            mview.setVisibility(View.GONE);
+        }
         return convertView;
     }
 
@@ -91,8 +99,8 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
                 mresults.count = mpeople_list.size();
             }else{
                 //we perform filttering operations
-                List<PeopleListModel> mpeoplechatlists = new ArrayList<>();
-                for(PeopleListModel m: mpeople_list){
+                List<Resultss> mpeoplechatlists = new ArrayList<>();
+                for(Resultss m: mpeople_list){
                     if(m.getName().toUpperCase().startsWith(constraint.toString().toUpperCase())){
                         mpeoplechatlists.add(m);
                     }

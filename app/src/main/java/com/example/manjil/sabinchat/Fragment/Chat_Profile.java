@@ -23,7 +23,7 @@ import com.example.manjil.sabinchat.Activity.SingleChat;
 import com.example.manjil.sabinchat.Adapters.Custom_chathome_Adpater;
 import com.example.manjil.sabinchat.Model.Model_HomeChat;
 import com.example.manjil.sabinchat.R;
-import com.example.manjil.sabinchat.Title_Text_Listeners;
+import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 
 import java.util.ArrayList;
 import java.util.List;

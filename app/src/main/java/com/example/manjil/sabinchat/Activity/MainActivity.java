@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,12 +17,13 @@ import com.example.manjil.sabinchat.Fragment.ListOfPeople;
 import com.example.manjil.sabinchat.Fragment.Settingfragment;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.Constants.Route;
-import com.example.manjil.sabinchat.Title_Text_Listeners;
+import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 
 public class MainActivity extends AppCompatActivity implements Title_Text_Listeners {
     private static final String TAG = "MainActivity";
     Context mContext;
     private TextView mtextviewtitle;
+    int userids;
 
 
 
@@ -59,6 +61,11 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 //        BottomNavigationViewHelper.disableShiftMode(bottom_navigation);
+        try{
+            userids = getIntent().getExtras().getInt("userid");
+        }catch (NullPointerException ex){
+            Log.d(TAG, "onCreate: getting user ids exception"+ex.toString());
+        }
         initview();
         mContext = this;
         if( savedInstanceState == null )
