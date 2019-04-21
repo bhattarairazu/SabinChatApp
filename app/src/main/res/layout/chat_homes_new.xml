@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f6f6f6">
+
+    <LinearLayout
+        android:id="@+id/linear_profile"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/colorGreen"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/mimageview_btnback"
+            android:layout_width="40dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/ic_chevron_left_black_24dp" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:src="@drawable/manji" />
+
+        <LinearLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manjil Nepali"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Active in last 2 minss"
+                android:textColor="#9580d7"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/linear_profile"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textColor="#98a9b7"
+            android:text="January 18" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/manji" />
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/round_grey"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="05dp"
+                    android:textColor="#616e7f"
+                    android:text="Hi, there" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textColor="#616e7f"
+                    android:text="Do you need help with pricing ?" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:text="January 18"
+            android:textColor="#98a9b7"
+            android:id="@+id/myTextView_Roboto_Regular" />
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            android:gravity="right">
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/round_blue"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="05dp"
+                    android:text="Hi, there"
+                    android:textColor="#fff" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="Do you need help with pricing ?"
+                    android:textColor="#fff" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#98a9b7"
+                android:text="just now. Seen"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:background="#E9EDED"
+        android:layout_alignParentBottom="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+
+        <Button
+            android:id="@+id/bt_send"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Send"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            android:background="@drawable/btn_grey"
+            android:layout_alignParentRight="true"
+            android:stateListAnimator="@null"
+            android:layout_centerInParent="true"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/bt_send"
+            android:background="@drawable/bg_white_rounded"
+            android:layout_centerVertical="true">
+
+            <ImageButton
+                android:id="@+id/bt_attachment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_attachment"
+                android:padding="10dp"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:layout_centerVertical="true"/>
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/bt_attachment"
+                android:padding="15dp"
+                android:hint="Enter your message"
+                android:maxLines="3"
+                android:textSize="14sp"
+                android:textColor="@color/colorTextBlack"
+                android:textColorHint="@color/colorTextHint"
+
+                android:background="@android:color/transparent"
+                android:inputType="textCapSentences"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>
