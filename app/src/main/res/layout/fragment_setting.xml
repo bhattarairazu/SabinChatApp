@@ -12,8 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="100dp"
         android:layout_marginLeft="11.7dp"
+        android:id="@+id/profile_pictures"
         android:layout_gravity="center"
-        android:src="@drawable/manji" />
+        android:src="@drawable/p_file" />
 
 
     <custom_font.MyTextView
@@ -22,6 +23,7 @@
         android:layout_gravity="center_horizontal"
         android:text="Manjil Nepali"
         android:textColor="#009a9a"
+        android:id="@+id/mtextview_proilename"
         android:textSize="20dp"
         android:layout_marginTop="10dp"
         android:textStyle="bold" />

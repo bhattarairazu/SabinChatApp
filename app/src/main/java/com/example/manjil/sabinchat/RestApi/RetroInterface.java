@@ -53,6 +53,16 @@ public interface RetroInterface {
     @POST("send")
     Call<UserSignup> uploadimage(@PartMap()Map<String,RequestBody> partmap, @Part MultipartBody.Part file);
 
+//updating name of the user
+    @FormUrlEncoded
+    @POST("user/update/{user_id}")
+    Call<UserSignup> update_username(@Path("user_id") int user_id,@Field("name") String name);
+
+    //updating user images
+    @Multipart
+    @POST("update/picture/14")
+    Call<UserSignup> update_profileimage(@Part MultipartBody.Part file);
+
 
 
 

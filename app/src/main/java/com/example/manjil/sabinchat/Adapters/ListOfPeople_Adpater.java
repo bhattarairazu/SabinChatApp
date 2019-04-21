@@ -1,6 +1,7 @@
 package com.example.manjil.sabinchat.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.provider.Contacts;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,11 +13,14 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.manjil.sabinchat.Constants.SharedPreference;
 import com.example.manjil.sabinchat.Fragment.ListOfPeople;
 import com.example.manjil.sabinchat.Model.Model_HomeChat;
 import com.example.manjil.sabinchat.Model.PeopleListModel;
 import com.example.manjil.sabinchat.Model.user_list.Resultss;
 import com.example.manjil.sabinchat.R;
+import com.example.manjil.sabinchat.RestApi.ApiClient;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -32,11 +36,13 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
     private List<Resultss> mpeople_list = new ArrayList<>();
     private Context mcontext;
     private ValueFilter mfilters = new ValueFilter();
+    SharedPreference mshared;
     //constructor
 
     public ListOfPeople_Adpater(List<Resultss> mpeople_list, Context mcontext) {
         this.mpeople_list = mpeople_list;
         this.mcontext = mcontext;
+        mshared = new SharedPreference(mcontext);
     }
 
     @Override
@@ -65,11 +71,18 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
         View mview = (View) convertView.findViewById(R.id.online_indicators);
         TextView mlistpeope = (TextView) convertView.findViewById(R.id.tv_user_name);
         ImageView mimageiewpeople =(ImageView) convertView.findViewById(R.id.iv_user_photo);
-         if(mgetsingleitems.getStatus()==1){
+          if(mgetsingleitems.getStatus()==1){
             mview.setVisibility(View.VISIBLE);
 
-             //setting data to respective view
-             mlistpeope.setText(mgetsingleitems.getUsername());
+              //setting data to respective view
+              if(mgetsingleitems.getId()!=mshared.getuserids()){
+                  mlistpeope.setText(mgetsingleitems.getUsername());
+                  if(mgetsingleitems.getPicture()!=null) {
+                      Picasso.get().load(ApiClient.BASE_URL+mgetsingleitems.getPicture()).into(mimageiewpeople);
+                  }
+
+              }
+
 
          }else{
             mview.setVisibility(View.GONE);
