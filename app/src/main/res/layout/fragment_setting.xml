@@ -27,6 +27,7 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/mtextview_updateprofile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update Profile"

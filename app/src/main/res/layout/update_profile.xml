@@ -55,7 +55,7 @@
 
 
         <custom_font.MyEditText
-            android:id="@+id/email"
+            android:id="@+id/current_password"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -78,7 +78,7 @@
         android:layout_marginTop="10dp">
 
         <custom_font.MyEditText
-            android:id="@+id/username"
+            android:id="@+id/new_password"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -105,7 +105,7 @@
 
 
         <custom_font.MyEditText
-            android:id="@+id/password"
+            android:id="@+id/new_passwordconfirm"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -126,7 +126,7 @@
 
 
     <custom_font.MyTextView
-        android:id="@+id/getstarted"
+        android:id="@+id/setpassword"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@drawable/round"

@@ -49,8 +49,10 @@ public class Custom_SingleMessage_Adapter extends BaseAdapter {
     }
 
     @Override
-    public int getItemViewType(int position) {
-        return (mmessage_list).get(position).getFrom_id()==hostuser?1:0;
+    public int getItemViewType(int position) throws IndexOutOfBoundsException {
+        int i = (mmessage_list).get(position).getFrom_id()==hostuser?1:0;
+
+        return i;
     }
 
     @Override
@@ -74,32 +76,33 @@ public class Custom_SingleMessage_Adapter extends BaseAdapter {
             }
         }
         Model_sendingmessage msingle_items = mmessage_list.get(position);
-
+        Log.d(TAG, "getView: postionsitons"+position);
         if(type == 1){
                 TextView mtextview_to =(TextView) convertView.findViewById(R.id.mtextview_tomessages);
-//                if(msingle_items.getMuri()!=null ){
-//                ImageView mimageview = (ImageView) convertView.findViewById(R.id.miageview_imageto);
-//
-//                mimageview.setVisibility(View.VISIBLE);
-//            Log.d(TAG, "getView: getting image uris"+msingle_items.getMuri());
-//                mimageview.setImageURI(msingle_items.getMuri());
-//                }
-            if(!msingle_items.getPicture().equals("")){
-                ImageView mimageview = (ImageView) convertView.findViewById(R.id.miageview_imageto);
+            ImageView mimageview = (ImageView) convertView.findViewById(R.id.miageview_imageto);
+            mimageview.setVisibility(View.GONE);
 
-                mimageview.setVisibility(View.VISIBLE);
-                Log.d(TAG, "getView: getting image uris"+msingle_items.getMuri());
+             if(!msingle_items.getPicture().matches("")){
+                 Log.d(TAG, "getView: msing pictures detials"+msingle_items.getPicture());
+
+                 mimageview.setVisibility(View.VISIBLE);
+               // Log.d(TAG, "getView: getting image uris"+msingle_items.getMuri());
                // mimageview.setImageURI(msingle_items.getMuri());
                 Picasso.get().load(pictureurl+msingle_items.getPicture()).into(mimageview);
             }
 
                 mtextview_to.setText(msingle_items.getMessage());
-            }else{
+            }
+
+            if (type==0){
                 ImageView mimageview_from = (ImageView) convertView.findViewById(R.id.mimageview_frommessage);
                 TextView mtextview_from = (TextView) convertView.findViewById(R.id.mtextview_frommessage);
-                if(!msingle_items.getPicture().equals("")){
-                    ImageView mimavew_image_froms = (ImageView) convertView.findViewById(R.id.miageview_imagefrom);
+                ImageView mimavew_image_froms = (ImageView) convertView.findViewById(R.id.miageview_imagefrom);
+                mimavew_image_froms.setVisibility(View.GONE);
+
+                if(!msingle_items.getPicture().matches("")){
                     mimavew_image_froms.setVisibility(View.VISIBLE);
+
                     Picasso.get().load(pictureurl+msingle_items.getPicture()).into(mimavew_image_froms);
 
                 }

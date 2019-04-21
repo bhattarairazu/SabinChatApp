@@ -2,13 +2,18 @@ package com.example.manjil.sabinchat.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.CursorLoader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -32,9 +37,16 @@ import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.RestApi.ApiClient;
 import com.example.manjil.sabinchat.RestApi.RetroInterface;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -56,6 +68,7 @@ public class SingleChat extends AppCompatActivity{
     private ImageView mbtn_sendimagebtn;
     private static final int GALLERY_REQUEST_CODE = 100;
     Uri selectedImage;
+    private Bitmap mbitmap;
     boolean sendimage = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +125,7 @@ public class SingleChat extends AppCompatActivity{
                                 int to_id = response.body().getResults().get(i).getTo_id();
                                 String time = response.body().getResults().get(i).getTime();
                                 String pictures = response.body().getResults().get(i).getPicture();
+                            Log.d(TAG, "onResponse: getting pictures message from server"+pictures);
                                 Model_sendingmessage mmessage_single = new Model_sendingmessage(message,from_id,to_id,time,selectedImage,pictures);
                                 mlistmodel.add(mmessage_single);
                         }
@@ -153,26 +167,27 @@ public class SingleChat extends AppCompatActivity{
                     if(sendimage) {
                         Log.d(TAG, "onClick: image urls"+selectedImage);
                         messages = meditext_typemessage.getText().toString();
-                        Model_sendingmessage msend = new Model_sendingmessage();
-                        msend.setMessage(messages);
-                        msend.setFrom_id(SharedPreference.user_ids);
-                        msend.setTo_id(userids);
-                        msend.setMuri(selectedImage);
-                        mlistmodel.add(msend);
-                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
-                        mlisview_messagse.setAdapter(madapter);
-                        madapter.notifyDataSetChanged();
-                        sendmessage_toserver(messages, SharedPreference.user_ids, userids);
+//                        Model_sendingmessage msend = new Model_sendingmessage();
+//                        msend.setMessage(messages);
+//                        msend.setFrom_id(SharedPreference.user_ids);
+//                        msend.setTo_id(userids);
+//                        msend.setMuri(selectedImage);
+//                        msend.setPicture(compresstostring());
+//                        mlistmodel.add(msend);
+//                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
+//                        mlisview_messagse.setAdapter(madapter);
+//                        madapter.notifyDataSetChanged();
+                        sendmessage_toserver_withimages(messages, SharedPreference.user_ids, userids);
                         sendimage = false;
 
                     }else{
                         messages = meditext_typemessage.getText().toString();
-                        Model_sendingmessage msend = new Model_sendingmessage(messages, SharedPreference.user_ids, userids, "3 hrs");
-                        mlistmodel.add(msend);
-                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
-                        mlisview_messagse.setAdapter(madapter);
-                        madapter.notifyDataSetChanged();
-                        sendmessage_toserver(messages, SharedPreference.user_ids, userids);
+//                        Model_sendingmessage msend = new Model_sendingmessage(messages, SharedPreference.user_ids, userids, "3 hrs");
+//                        mlistmodel.add(msend);
+//                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
+//                        mlisview_messagse.setAdapter(madapter);
+//                        madapter.notifyDataSetChanged();
+                        sendmessage_toserver_withoutimages(messages, SharedPreference.user_ids, userids);
                     }
                     meditext_typemessage.setText("");
 
@@ -181,15 +196,16 @@ public class SingleChat extends AppCompatActivity{
 
 
         }
-        //sending message to server
-    public void sendmessage_toserver(String messagess,int from_ids,int to_ids){
+        public void sendmessage_toserver_withoutimages(String messages,int from_ids,int to_ids){
         minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
-        Call<UserSignup> msendmessage = minterface.msend_singlemessage(messagess,from_ids,to_ids);
+        Call<UserSignup> msendmessage = minterface.msend_singlemessage(messages,from_ids,to_ids);
         msendmessage.enqueue(new Callback<UserSignup>() {
             @Override
             public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
                 if(response.isSuccessful()){
+                    Log.d(TAG, "onResponse: image response"+response.toString());
                         if(response.body().getResults().getStatus()){
+
                             mlistmodel.clear();
                             getmessage_fromserver();
                         }
@@ -202,6 +218,73 @@ public class SingleChat extends AppCompatActivity{
 
             }
         });
+        }
+        //sending message to server with images contained
+    public void sendmessage_toserver_withimages(String messagess,int from_ids,int to_ids){
+
+       //This section is used for uploading multipart images with messages
+        File mfile = new File(getPath(selectedImage));
+        RequestBody filereqbody = RequestBody.create(MediaType.parse("image/"),mfile);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image",mfile.getName(),filereqbody);
+
+        //creating requestbody object from string
+        RequestBody message = createPartFromString(messagess);
+        RequestBody to_id = createPartFromString(String.valueOf(to_ids));
+        RequestBody from_id = createPartFromString(String.valueOf(from_ids));
+       // String images = compresstostring();
+
+        //hashmap for sending messages with images
+        HashMap<String,RequestBody> map = new HashMap<>();
+        map.put("message",message);
+        map.put("to_id",to_id);
+        map.put("from_id",from_id);
+
+
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<UserSignup> msendmessage = minterface.uploadimage(map,body);
+        msendmessage.enqueue(new Callback<UserSignup>() {
+            @Override
+            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                if(response.isSuccessful()){
+                    Log.d(TAG, "onResponse: image response"+response.toString());
+                    if(response.body().getResults().getStatus()){
+
+                        mlistmodel.clear();
+
+                        getmessage_fromserver();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserSignup> call, Throwable t) {
+                Log.d(TAG, "onFailure: error"+t.toString());
+
+            }
+        });
+
+    }
+
+//    //creating file objects
+//    public MultipartBody.Part prepareFilePart(String partName,Uri fileuri){
+//        File file = FileUtils.getFile(this, fileuri);
+//
+//        // create RequestBody instance from file
+//        RequestBody requestFile =
+//                RequestBody.create(
+//                        MediaType.parse(getContentResolver().getType(fileuri)),
+//                        file
+//                );
+//
+//        // MultipartBody.Part is used to send also the actual file name
+//        return MultipartBody.Part.createFormData(partName, file.getName(), requestFile);
+//
+//    }
+
+    //creating multipart file from string for uploading message with images
+    @NonNull
+    private RequestBody createPartFromString(String descriptionString){
+        return RequestBody.create(MultipartBody.FORM,descriptionString);
     }
     //pick image from gallery
     private void pickFromGallery(){
@@ -226,8 +309,36 @@ public class SingleChat extends AppCompatActivity{
                     //data.getData returns the content URI for the selected Image
                    selectedImage = data.getData();
                     meditext_typemessage.setHint("Image Selected");
+                    try {
+                        mbitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),selectedImage);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //getPath(selectedImage);
+                    Log.d(TAG, "onActivityResult: image paths "+compresstostring());
                     //imageView.setImageURI(selectedImage);
                     break;
             }
     }
+    //getting filepat from uri of theimage
+    private String getPath(Uri contentUri) {
+        String[] proj = { MediaStore.Images.Media.DATA };
+        CursorLoader loader = new CursorLoader(getApplicationContext(), contentUri, proj, null, null, null);
+        Cursor cursor = loader.loadInBackground();
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(column_index);
+        cursor.close();
+        return result;
+    }
+    //not used for now
+    //converting bitmapt image to encoded string
+    private String compresstostring(){
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        mbitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte [] imgBytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgBytes,Base64.DEFAULT);
+    }
+
+
 }

@@ -18,6 +18,8 @@ import com.example.manjil.sabinchat.Activity.LoginSignupActivity;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 
+import org.w3c.dom.Text;
+
 /**
  * Created by User on 3/31/2019.
  */
@@ -25,7 +27,7 @@ import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 public class Settingfragment extends Fragment {
     //initilization interface
     private Title_Text_Listeners mlisteners;
-    private TextView changepasswords,logouts;
+    private TextView changepasswords,logouts,updatproifle;
 
     @Override
     public void onAttach(Context context) {
@@ -45,21 +47,22 @@ public class Settingfragment extends Fragment {
         return mview;
     }
     public void initviews(View mviews){
-        changepasswords =(TextView) mviews.findViewById(R.id.mtextview_changepassword);
-        logouts =(TextView) mviews.findViewById(R.id.mtextview_logout);
+        //updating profile
+        updatproifle =(TextView) mviews.findViewById(R.id.mtextview_updateprofile);
+       // changepasswords =(TextView) mviews.findViewById(R.id.mtextview_changepassword);
+        logouts =(TextView) mviews.findViewById(R.id.logout);
 
 
     }
     public void onclicklisteners(){
-        //logout on click listeners
+       // logout on click listeners
         logouts.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logout();
             }
         });
-        //change password on click listners
-        changepasswords.setOnClickListener(new View.OnClickListener() {
+        updatproifle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Dialogueinterface_changepassword();
@@ -70,7 +73,7 @@ public class Settingfragment extends Fragment {
     public void Dialogueinterface_changepassword(){
         AlertDialog malertidalogeus = new AlertDialog.Builder(getContext()).create();
         //malertidalogeus.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        View mview =getLayoutInflater().inflate(R.layout.change_password,null);
+        View mview =getLayoutInflater().inflate(R.layout.update_profile,null);
         EditText meditext = (EditText) mview.findViewById(R.id.current_password);
 
         EditText meditext_newpassword = (EditText) mview.findViewById(R.id.new_password);
