@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="150dp">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:background="@color/colorGreen"
+    android:gravity="center"
+    android:layout_height="35dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Group"
+        android:textSize="23dp"
+        android:textStyle="bold"
+        />
+</LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:id="@+id/medittext_groupname"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:hint="Enter Group Name"
+        />
+        <Button
+            android:layout_width="wrap_content"
+            android:background="@drawable/round_blue"
+            android:layout_height="40dp"
+            android:text="Create"
+            android:layout_marginTop="10dp"
+            android:id="@+id/mbutton_creategroup"
+            android:padding="10dp"
+            android:layout_gravity="center_horizontal"
+            />
+</LinearLayout>

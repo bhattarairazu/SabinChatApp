@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RestrictTo;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,18 +17,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.manjil.sabinchat.Activity.Activity_GroupChat;
 import com.example.manjil.sabinchat.Activity.SingleChat;
 import com.example.manjil.sabinchat.Adapters.Custom_chathome_Adpater;
+import com.example.manjil.sabinchat.Constants.SharedPreference;
 import com.example.manjil.sabinchat.Model.Model_HomeChat;
+import com.example.manjil.sabinchat.Model.UserSignup;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
+import com.example.manjil.sabinchat.RestApi.ApiClient;
+import com.example.manjil.sabinchat.RestApi.RetroInterface;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by User on 3/31/2019.
@@ -50,6 +63,12 @@ public class Chat_Profile extends Fragment {
     //initilizatin interface
     private Title_Text_Listeners mlisteners;
 
+    private FloatingActionButton madd_group;
+    //retrofit interface for retrofit request
+    RetroInterface minterface;
+    //shared preferences for getting user infos
+    SharedPreference msharedpreferences;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -61,6 +80,8 @@ public class Chat_Profile extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mview = inflater.inflate(R.layout.chat_profile,container,false);
+        //initilization shared preferences
+        msharedpreferences = new SharedPreference(getContext());
         //initviews
         initnview(mview);
         //adapter data initilization
@@ -73,6 +94,8 @@ public class Chat_Profile extends Fragment {
         searchimageview =(ImageView) mviews.findViewById(R.id.mimageview_searchs);
        msearacheditext =(EditText) mviews.findViewById(R.id.medittext_searches);
         mlistviews =(ListView) mviews.findViewById(R.id.mlistview_homechat);
+        //floating action btn
+        madd_group =(FloatingActionButton) mviews.findViewById(R.id.mfloating_action);
 
 
     }
@@ -115,6 +138,13 @@ public class Chat_Profile extends Fragment {
 
     }
     public void onclicklisteners(){
+        //floating point button on click listners
+        madd_group.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertdialogue_creategroup();
+            }
+        });
         //ediitext filter onlcick listenrs
         msearacheditext.addTextChangedListener(new TextWatcher() {
             @Override
@@ -162,4 +192,80 @@ public class Chat_Profile extends Fragment {
                 .setNegativeButton("No",null)
                 .show();
     }
+
+    //alertdialogue create group
+    public void alertdialogue_creategroup(){
+        final AlertDialog malert = new AlertDialog.Builder(getContext()).create();
+        View mview = getLayoutInflater().inflate(R.layout.alertdialog_creategroup,null);
+        final EditText mediitext_groupname = (EditText) mview.findViewById(R.id.medittext_groupname);
+        Button mbtn_create = (Button) mview.findViewById(R.id.mbutton_creategroup);
+        malert.setView(mview);
+        mbtn_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String names = mediitext_groupname.getText().toString();
+                create_group_withname(names);
+                malert.dismiss();
+
+            }
+        });
+        malert.show();
+    }
+    public void create_group_withname(final String groupname){
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<UserSignup> mcreategroup = minterface.getgroup_info(msharedpreferences.getuserids());
+
+        mcreategroup.enqueue(new Callback<UserSignup>() {
+            @Override
+            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                if(response.isSuccessful()){
+                    if(response.body().getResults().getStatus()){
+                        Toast.makeText(getContext(), "Group Created", Toast.LENGTH_SHORT).show();
+                        Model_HomeChat mhomechat = new Model_HomeChat();
+                        mhomechat.setName(groupname);
+                        mhomechatlisst.add(mhomechat);
+                        madpters = new Custom_chathome_Adpater(mhomechatlisst,getContext());
+                        mlistviews.setAdapter(madpters);
+
+                        int group_ids = response.body().getResults().getGroupId();
+                        msharedpreferences.set_groupid(group_ids);
+                        Log.d(TAG, "onResponse: group ids"+group_ids);
+                        //instantly updating group name also
+                        update_group_name(group_ids,groupname);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserSignup> call, Throwable t) {
+                Log.d(TAG, "onFailure: group create failed"+t.toString());
+                Toast.makeText(getContext(), "Group Create Failed!Please Try Again!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    //updating group name
+    public void update_group_name(int gid, final String name_group){
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<UserSignup> mupdatename = minterface.mupdate_groupname(gid,name_group);
+        mupdatename.enqueue(new Callback<UserSignup>() {
+            @Override
+            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                if(response.isSuccessful()){
+                    if(response.body().getResults().getStatus()){
+                        getContext().startActivity(new Intent(getActivity(),Activity_GroupChat.class));
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserSignup> call, Throwable t) {
+                Log.d(TAG, "onFailure:update group name "+t.toString());
+            }
+        });
+
+    }
+
 }

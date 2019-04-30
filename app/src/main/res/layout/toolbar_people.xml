@@ -11,17 +11,18 @@
     app:contentInsetRight="0dp"
     app:contentInsetStart="0dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginLeft="11.7dp"
-        android:src="@drawable/p_file" />
+   <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@drawable/back_btn"
+       android:layout_marginLeft="10dp"
+       />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:text="People"
+        android:text="Add User"
         android:textColor="#000"
         android:textSize="25dp"
         android:textStyle="bold"/>

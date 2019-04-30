@@ -71,6 +71,18 @@ public interface RetroInterface {
 //deleeting message
     @GET("message/delete/{message_id}")
     Call<UserSignup> delete_message(@Path("message_id") int message_id);
+    //create group
+    @GET("group/create/{user_id}")
+    Call<UserSignup> getgroup_info(@Path("user_id") int user_id);
+        //updating group name
+    @FormUrlEncoded
+    @POST("group/update/{group_id}")
+    Call<UserSignup> mupdate_groupname(@Path("group_id") int group_id,@Field("name") String name);
+
+    //Adding User to the group
+    @GET("group/user/add/{group_id}/{user_id}")
+    Call<UserSignup> madduser_to_group(@Path("group_id") int group_id,@Path("user_id") int user_id);
+
 
 
 

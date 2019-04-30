@@ -37,6 +37,7 @@ public class SharedPreference {
 
     public static final String KEY_STATUS = "status";
 
+    public static final String KEY_GROUP = null;
 
     // Constructor
     public SharedPreference(Context context){
@@ -56,9 +57,9 @@ public class SharedPreference {
         // Storing email in pref
         editor.putString(KEY_PICTURE, picture);
 
-        editor.putString(KEY_USERID,String.valueOf(user_id));
+        editor.putInt(KEY_USERID,user_id);
 
-        editor.putString(KEY_STATUS,String.valueOf(status));
+        editor.putInt(KEY_STATUS,status);
 
         // commit changes
         editor.commit();
@@ -70,26 +71,34 @@ public class SharedPreference {
         editor.commit();
     }
 
+    public void set_groupid(int groupid){
+        editor.putInt(KEY_GROUP,groupid);
+        editor.commit();
+    }
+
+    public int getGroupId(){
+        return pref.getInt(KEY_GROUP,0);
+    }
     /**
      * Get stored session data
      * */
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
-        // user name
-        user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
-
-        // user email id
-        user.put(KEY_PICTURE, pref.getString(KEY_PICTURE, null));
-
-        user.put(KEY_USERID,pref.getString(KEY_USERID,null));
-
-        user.put(KEY_STATUS,pref.getString(KEY_STATUS,null));
-
-        // return user
-        return user;
-    }
+//    public HashMap<String, String> getUserDetails(){
+//        HashMap<String, String> user = new HashMap<String, String>();
+//        // user name
+//        user.put(KEY_USERNAME, pref.getString(KEY_USERNAME, null));
+//
+//        // user email id
+//        user.put(KEY_PICTURE, pref.getString(KEY_PICTURE, null));
+//
+//        user.put(KEY_USERID,pref.getInt(KEY_USERID,0));
+//
+//        user.put(KEY_STATUS,pref.getInt(KEY_STATUS,0));
+//
+//        // return user
+//        return user;
+//    }
     public int getuserids(){
-        return Integer.parseInt(pref.getString(KEY_USERID,null));
+        return pref.getInt(KEY_USERID,0);
     }
 
     public String getpitures(){
@@ -99,7 +108,7 @@ public class SharedPreference {
         return pref.getString(KEY_USERNAME,null);
     }
     public int getstatus(){
-        return Integer.parseInt(pref.getString(KEY_STATUS,null));
+        return pref.getInt(KEY_STATUS,0);
     }
 
     //setting values

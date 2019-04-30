@@ -31,6 +31,18 @@ public class Results {
     @SerializedName("picture")
     @Expose
     private String picture;
+    @SerializedName("groupId")
+    @Expose
+    private int groupId;
+
+
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
 
     public String getPicture() {
         return picture;
