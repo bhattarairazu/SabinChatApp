@@ -12,6 +12,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -29,7 +30,7 @@ public interface RetroInterface {
    // @Headers("Content-Type:application/json")
     @FormUrlEncoded
     @POST("signup")
-    Call<UserSignup> mregister_information(@Field("name") String name,@Field("username") String username,@Field("password") String password);
+    Call<UserSignup> mregister_information(@Field("name") String name,@Field("username") String username,@Field("password") String password,@Field("email") String email);
     //for singin
     @FormUrlEncoded
     @POST("login")
@@ -63,6 +64,13 @@ public interface RetroInterface {
     @POST("update/picture/14")
     Call<UserSignup> update_profileimage(@Part MultipartBody.Part file);
 
+//updating userpassword
+    @FormUrlEncoded
+    @POST("password/update/{username}")
+    Call<UserSignup> update_password(@Path("username") String username,@Field("password") String password);
+//deleeting message
+    @GET("message/delete/{message_id}")
+    Call<UserSignup> delete_message(@Path("message_id") int message_id);
 
 
 

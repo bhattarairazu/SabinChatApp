@@ -57,7 +57,7 @@ public class Signup extends Fragment {
             @Override
             public void onClick(View v) {
                 if(validate()){
-                    post_registerinformation(name,username,password);
+                    post_registerinformation(name,username,password,email);
                 }
             }
         });
@@ -79,11 +79,11 @@ public class Signup extends Fragment {
         meditext_email =(EditText) mview.findViewById(R.id.email);
     }
     //initilization api request
-    public void post_registerinformation(String namess,String usenames,String passwords) {
+    public void post_registerinformation(String namess,String usenames,String passwords,String emails) {
         //UserSignup msignup = new UserSignup(namess, usenames, passwords);
 
         minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
-       Call<UserSignup> msignups = minterface.mregister_information(namess,usenames,passwords);
+       Call<UserSignup> msignups = minterface.mregister_information(namess,usenames,passwords,emails);
        msignups.enqueue(new Callback<UserSignup>() {
            @Override
            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {

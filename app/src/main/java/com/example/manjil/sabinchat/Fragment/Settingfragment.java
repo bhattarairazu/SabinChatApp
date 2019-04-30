@@ -61,6 +61,8 @@ public class Settingfragment extends Fragment {
     private RetroInterface minterface;
     boolean selectimage = false;
     SharedPreference mshared;
+    EditText meditext_newpassword;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -115,11 +117,10 @@ public class Settingfragment extends Fragment {
         malertidalogeus = new AlertDialog.Builder(getContext()).create();
         //malertidalogeus.requestWindowFeature(Window.FEATURE_NO_TITLE);
         View mview =getLayoutInflater().inflate(R.layout.update_profile,null);
-        final EditText meditext = (EditText) mview.findViewById(R.id.current_password);
+        final EditText meditext_current = (EditText) mview.findViewById(R.id.current_password);
         final EditText meditextname = (EditText) mview.findViewById(R.id.names);
         meditextname.setText(mshared.getusername());
-
-        EditText meditext_newpassword = (EditText) mview.findViewById(R.id.new_password);
+        meditext_newpassword = (EditText) mview.findViewById(R.id.new_password);
 
         EditText meditext_confirm = (EditText) mview.findViewById(R.id.new_passwordconfirm);
 
@@ -139,6 +140,7 @@ public class Settingfragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String names = meditextname.getText().toString();
+                String newpassword = meditext_newpassword.getText().toString();
 
                 if(selectimage && !TextUtils.isEmpty(names)){
 
@@ -155,6 +157,11 @@ public class Settingfragment extends Fragment {
                 if(!selectimage && TextUtils.isEmpty(names)){
                     meditextname.setError("Name Required");
                     return;
+                }
+
+                if(!TextUtils.isEmpty(newpassword)){
+                    update_oldpassword(newpassword);
+
                 }
 
 
@@ -180,6 +187,32 @@ public class Settingfragment extends Fragment {
                 .setNegativeButton("No",null)
                 .show();
     }
+    public void update_oldpassword(String password_news){
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<UserSignup> mupdate = minterface.update_password(mshared.getusername(),password_news);
+        mupdate.enqueue(new Callback<UserSignup>() {
+            @Override
+            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                if(response.isSuccessful()){
+                    if(response.body().getResults().getStatus()){
+                        Toast.makeText(getContext(), "Password Sucessfully Updated", Toast.LENGTH_SHORT).show();
+                        meditext_newpassword.setText("");
+                    }else{
+                        Toast.makeText(getContext(), "Failed To Update Password! Please Try Again!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserSignup> call, Throwable t) {
+                Log.d(TAG, "onFailure: failed"+t.toString());
+            }
+        });
+
+
+    }
+
+
     public void updatePicture_toserver(){
         //This section is used for uploading multipart images with messages
         File mfile = new File(getPath(selectedImage));

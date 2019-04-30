@@ -1,6 +1,8 @@
 package com.example.manjil.sabinchat.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.manjil.sabinchat.Adapters.Custom_SingleMessage_Adapter;
 import com.example.manjil.sabinchat.Constants.SharedPreference;
@@ -121,15 +125,19 @@ public class SingleChat extends AppCompatActivity{
                     if(response.isSuccessful()){
                         for(int i = response.body().getResults().size()-1;i>=0;i--){
                                 String message = response.body().getResults().get(i).getMessage();
+                                int id = response.body().getResults().get(i).getId();
                                 int from_id = response.body().getResults().get(i).getFrom_id();
                                 int to_id = response.body().getResults().get(i).getTo_id();
                                 String time = response.body().getResults().get(i).getTime();
                                 String pictures = response.body().getResults().get(i).getPicture();
                             Log.d(TAG, "onResponse: getting pictures message from server"+pictures);
-                                Model_sendingmessage mmessage_single = new Model_sendingmessage(message,from_id,to_id,time,selectedImage,pictures);
+                                Model_sendingmessage mmessage_single = new Model_sendingmessage(id,message,from_id,to_id,time,selectedImage,pictures);
                                 mlistmodel.add(mmessage_single);
                         }
-                        mlisview_messagse.setAdapter(new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids));
+
+                                madapter = new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids);
+
+                        mlisview_messagse.setAdapter(madapter);
                     }
                 }
 
@@ -191,6 +199,16 @@ public class SingleChat extends AppCompatActivity{
                     }
                     meditext_typemessage.setText("");
 
+                }
+            });
+
+            //listview clicklisteners
+            mlisview_messagse.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    int message_id = mlistmodel.get(position).getId();
+                    onconfirm_dialogue(position,message_id);
+                    return false;
                 }
             });
 
@@ -339,6 +357,45 @@ public class SingleChat extends AppCompatActivity{
         byte [] imgBytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(imgBytes,Base64.DEFAULT);
     }
+    public void deletemessage_fromserver(int id){
+         //final boolean delete_status = false;
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<UserSignup> mdelete = minterface.delete_message(id);
+        mdelete.enqueue(new Callback<UserSignup>() {
+            @Override
+            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                if(response.isSuccessful()){
+                    if(response.body().getResults().getStatus()){
+                        Toast.makeText(SingleChat.this, ""+response.body().getResults().getMsg(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
 
+            @Override
+            public void onFailure(Call<UserSignup> call, Throwable t) {
+                Log.d(TAG, "onFailure: "+t.toString());
+                Toast.makeText(SingleChat.this, "Message Delete Failed", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    //confirmation dialog for deleting or not
+    public void onconfirm_dialogue(final int pos, final int id){
+        new AlertDialog.Builder(this)
+                .setTitle("Delete")
+                .setMessage("Are You Sure You Want to Delete This Conversation ?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletemessage_fromserver(id);
+                        mlistmodel.remove(pos);
+                        madapter.notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("No",null)
+                .show();
+    }
 
 }
