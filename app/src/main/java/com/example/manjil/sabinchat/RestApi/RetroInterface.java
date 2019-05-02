@@ -83,6 +83,14 @@ public interface RetroInterface {
     @GET("group/user/add/{group_id}/{user_id}")
     Call<UserSignup> madduser_to_group(@Path("group_id") int group_id,@Path("user_id") int user_id);
 
+    //password reset
+    @GET("password/reset/{username}")
+    Call<UserSignup> resetpin(@Path("username") String username);
+
+    //verify pin
+    @GET("pin/verify/{username}/{pin}")
+    Call<UserSignup> verifypin(@Path("username") String username,@Path("pin") int pin);
+
 
 
 

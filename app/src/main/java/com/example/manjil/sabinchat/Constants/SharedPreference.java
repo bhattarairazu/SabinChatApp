@@ -38,6 +38,7 @@ public class SharedPreference {
     public static final String KEY_STATUS = "status";
 
     public static final String KEY_GROUP = null;
+    public static final String KEY_VERIYUSERNAME = null;
 
     // Constructor
     public SharedPreference(Context context){
@@ -74,6 +75,13 @@ public class SharedPreference {
     public void set_groupid(int groupid){
         editor.putInt(KEY_GROUP,groupid);
         editor.commit();
+    }
+    public void set_verifyuname(String unames){
+        editor.putString(KEY_VERIYUSERNAME,unames);
+        editor.commit();
+    }
+    public String get_usnames_verify(){
+        return pref.getString(KEY_VERIYUSERNAME,null);
     }
 
     public int getGroupId(){
