@@ -153,12 +153,15 @@ public class ListOfPeople extends Fragment {
                     if(response.code()==200){
                         for(int i =0;i<response.body().getResults().size();i++){
                             Resultss mresult = new Resultss();
-                            mresult.setId(response.body().getResults().get(i).getId());
-                            mresult.setName(response.body().getResults().get(i).getName());
-                            mresult.setPicture(response.body().getResults().get(i).getPicture());
-                            mresult.setStatus(response.body().getResults().get(i).getStatus());
-                            mresult.setUsername(response.body().getResults().get(i).getUsername());
-                            mgetlist.add(mresult);
+                            if(response.body().getResults().get(i).getStatus()==1) {
+                                mresult.setId(response.body().getResults().get(i).getId());
+                                mresult.setName(response.body().getResults().get(i).getName());
+                                mresult.setPicture(response.body().getResults().get(i).getPicture());
+                                Log.d(TAG, "onResponse: pictures" + response.body().getResults().get(i).getPicture());
+                                mresult.setStatus(response.body().getResults().get(i).getStatus());
+                                mresult.setUsername(response.body().getResults().get(i).getUsername());
+                                mgetlist.add(mresult);
+                            }
 
                         }
                         mpoepolelisadapter = new ListOfPeople_Adpater(mgetlist,getContext());

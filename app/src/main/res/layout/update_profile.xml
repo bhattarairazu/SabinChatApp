@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="480dp"
+    android:background="@drawable/background"
+    android:layout_marginTop="25dp"
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <RelativeLayout
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/photo_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="500dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/p_file" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/add_story"
+            android:id="@+id/story_plusss"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"/>
+
+    </RelativeLayout>
+
+    <custom_font.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Update Photo"
+        android:textColor="#fff"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/roundwhite">
+
+
+
+        <custom_font.MyEditText
+            android:id="@+id/names"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:paddingLeft="10dp"
+            android:hint="New Name"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:drawablePadding="20dp"
+            android:textSize="13dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/roundwhite">
+
+
+
+        <custom_font.MyEditText
+            android:id="@+id/current_password"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:paddingLeft="10dp"
+            android:hint="Current Password"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:drawablePadding="20dp"
+            android:textSize="13dp"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/roundwhite"
+        android:layout_marginTop="10dp">
+
+        <custom_font.MyEditText
+            android:id="@+id/new_password"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:paddingLeft="10dp"
+            android:hint="New password"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:drawablePadding="20dp"
+
+            android:textSize="13dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/roundwhite"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp">
+
+
+
+        <custom_font.MyEditText
+            android:id="@+id/new_passwordconfirm"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:paddingLeft="10dp"
+            android:hint="Re-enter password"
+            android:textColor="#fff"
+            android:textColorHint="#fff"
+            android:drawablePadding="20dp"
+
+            android:textSize="13dp"
+            />
+
+
+
+    </LinearLayout>
+
+
+
+    <custom_font.MyTextView
+        android:id="@+id/setpassword"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/round"
+
+        android:text="Confirm"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:layout_above="@+id/bottom"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"/>
+
+
+
+</LinearLayout>

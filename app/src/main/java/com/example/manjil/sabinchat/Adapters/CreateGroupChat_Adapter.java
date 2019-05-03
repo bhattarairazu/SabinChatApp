@@ -1,8 +1,6 @@
 package com.example.manjil.sabinchat.Adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.provider.Contacts;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,36 +8,35 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.manjil.sabinchat.Constants.SharedPreference;
-import com.example.manjil.sabinchat.Fragment.ListOfPeople;
-import com.example.manjil.sabinchat.Model.Model_HomeChat;
-import com.example.manjil.sabinchat.Model.PeopleListModel;
+import com.example.manjil.sabinchat.Model.UserSignup;
 import com.example.manjil.sabinchat.Model.user_list.Resultss;
+import com.example.manjil.sabinchat.Model.user_list.Userlists;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.RestApi.ApiClient;
+import com.example.manjil.sabinchat.RestApi.RetroInterface;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by User on 3/31/2019.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
-    private static final String TAG = "ListOfPeople_Adpater";
+public class CreateGroupChat_Adapter extends BaseAdapter implements Filterable {
+    private static final String TAG = "CreateGroupChat_Adapter";
     private List<Resultss> mpeople_list = new ArrayList<>();
     private Context mcontext;
-    private ValueFilter mfilters = new ValueFilter();
+    ValueFilter mfilters = new ValueFilter();
     SharedPreference mshared;
-    //constructor
-
-    public ListOfPeople_Adpater(List<Resultss> mpeople_list, Context mcontext) {
+    RetroInterface minterfaces;
+    public CreateGroupChat_Adapter(List<Resultss> mpeople_list, Context mcontext) {
         this.mpeople_list = mpeople_list;
         this.mcontext = mcontext;
         mshared = new SharedPreference(mcontext);
@@ -47,49 +44,60 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
 
     @Override
     public int getCount() {
-        return mpeople_list.size();//return total list size
+        return mpeople_list.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return mpeople_list.get(position);//return list items at specific position
+        return mpeople_list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return position; //retun only positoin
+        return position;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null){
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_people,parent,false);
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_addusergroup,parent,false);
         }
         //getting current item to be displayes
-        Resultss mgetsingleitems = mpeople_list.get(position);
+        final Resultss mgetsingleitems = mpeople_list.get(position);
         //initilizing textview and image views
         View mview = (View) convertView.findViewById(R.id.online_indicators);
         TextView mlistpeope = (TextView) convertView.findViewById(R.id.tv_user_name);
         ImageView mimageiewpeople =(ImageView) convertView.findViewById(R.id.iv_user_photo);
-          if(mgetsingleitems.getStatus()==1){
+        ImageButton maddbutton = (ImageButton) convertView.findViewById(R.id.mbutton_addtogroup);
+
+        if(mgetsingleitems.getStatus()==1){
             mview.setVisibility(View.VISIBLE);
 
-              //setting data to respective view
-              if(mgetsingleitems.getId()!=mshared.getuserids()){
-                  mlistpeope.setText(mgetsingleitems.getUsername());
-                  if(mgetsingleitems.getPicture()!=null) {
-                      Picasso.get().load(ApiClient.BASE_URL+mgetsingleitems.getPicture()).into(mimageiewpeople);
-                  }
+            //setting data to respective view
+            if(mgetsingleitems.getId()!=mshared.getuserids()){
+                mlistpeope.setText(mgetsingleitems.getUsername());
+                if(mgetsingleitems.getPicture()!=null) {
+                    Picasso.get().load(ApiClient.BASE_URL+mgetsingleitems.getPicture()).into(mimageiewpeople);
+                }
 
-              }
+            }
 
 
-         }else{
+        }else{
             mview.setVisibility(View.GONE);
         }
+        //on add button clicks
+        //adding respective user to the group
+        maddbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int userids = mgetsingleitems.getId();
+                adduser_to_group(userids);
+            }
+        });
+
         return convertView;
     }
-
     @Override
     public Filter getFilter() {
         if(mfilters == null){
@@ -97,7 +105,6 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
         }
         return mfilters;
     }
-
     //for filtering listivew data we use Filter class
     private class ValueFilter extends Filter {
 
@@ -140,5 +147,28 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
         }
 
 
+    }
+    //adding user to the group
+    public void adduser_to_group(int userids){
+        minterfaces = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<UserSignup> madduser = minterfaces.madduser_to_group(mshared.getGroupId(),userids);
+        madduser.enqueue(new Callback<UserSignup>() {
+            @Override
+            public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+                if(response.isSuccessful()){
+                    if(response.body().getResults().getStatus()){
+                        Toast.makeText(mcontext, ""+response.body().getResults().getMsg(), Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(mcontext, "Failed To Add User!Please Try Again", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserSignup> call, Throwable t) {
+                Log.d(TAG, "onFailure: faile"+t.toString());
+                Toast.makeText(mcontext, "Failed To Add User!Please Try Again", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

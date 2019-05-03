@@ -4,20 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginTop="30dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#000"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:layout_marginLeft="11.7dp"
+        android:id="@+id/profile_pictures"
+        android:layout_gravity="center"
+        android:src="@drawable/p_file" />
+
+
+    <custom_font.MyTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Manjil Nepali"
+        android:textColor="#009a9a"
+        android:id="@+id/mtextview_proilename"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/mtextview_changepassword"
+        android:id="@+id/mtextview_updateprofile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Change Password"
+        android:text="Update Profile"
         android:textColor="@color/colorPrimaryDark"
         android:layout_margin="8dp"
+        android:textStyle="bold"
         android:textSize="18sp"/>
 
     <View
@@ -29,9 +47,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Log Out"
-        android:id="@+id/mtextview_logout"
+        android:id="@+id/logout"
         android:textColor="@color/colorPrimaryDark"
         android:layout_margin="8dp"
+        android:textStyle="bold"
         android:textSize="18sp"/>
 
     <View

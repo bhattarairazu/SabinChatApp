@@ -5,6 +5,7 @@ import android.net.Uri;
 import java.net.URI;
 
 public class Model_sendingmessage {
+    private int id;
     private String message;
     private int from_id;
     private int to_id;
@@ -16,7 +17,8 @@ public class Model_sendingmessage {
     public Model_sendingmessage() {
     }
 
-    public Model_sendingmessage(String message, int from_id, int to_id, String time, Uri muri) {
+    public Model_sendingmessage(int id, String message, int from_id, int to_id, String time, Uri muri) {
+        this.id = id;
         this.message = message;
         this.from_id = from_id;
         this.to_id = to_id;
@@ -24,7 +26,8 @@ public class Model_sendingmessage {
         this.muri = muri;
     }
 
-    public Model_sendingmessage(String message, int from_id, int to_id, String time, Uri muri, String picture) {
+    public Model_sendingmessage(int id, String message, int from_id, int to_id, String time, Uri muri, String picture) {
+        this.id = id;
         this.message = message;
         this.from_id = from_id;
         this.to_id = to_id;
@@ -38,6 +41,14 @@ public class Model_sendingmessage {
         this.from_id = from_id;
         this.to_id = to_id;
         this.time = time;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getPicture() {

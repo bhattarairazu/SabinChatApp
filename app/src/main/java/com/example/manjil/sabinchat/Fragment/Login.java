@@ -49,13 +49,19 @@ public class Login extends Fragment {
     private Runnable mrunnables;
     //setting progress dialog
     ProgressDialog mdialog;
+    SharedPreference msharedpreferece;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View mview = inflater.inflate(R.layout.fragment_login,container,false);
+        msharedpreferece = new SharedPreference(getContext());
+        if(msharedpreferece.isLoggedIn()){
+            startActivity(new Intent(getContext(), MainActivity.class));
+        }
         initviews(mview);
         setuponclicklisteners();
+
         return mview;
     }
     public void setuponclicklisteners(){
@@ -95,7 +101,7 @@ public class Login extends Fragment {
         //getstarted button
         mgetstarted =(TextView) views.findViewById(R.id.login_getstarted);
     }
-    public void chekclogin(String una,String pass){
+    public void chekclogin(final String una,String pass){
         minterface =ApiClient.getAPICLIENT().create(RetroInterface.class);
         Call<UserSignup> mcall = minterface.mlogins(una,pass);
         mcall.enqueue(new Callback<UserSignup>() {
@@ -105,6 +111,7 @@ public class Login extends Fragment {
                     if(response.code()==200 && response.message().equals("OK")){
                         status = response.body().getResults().getStatus();
                         if(status){
+                                msharedpreferece.createLoginSession(una,response.body().getResults().getUserId(),1,"");
                             //updating user online status
                             //setting online status to true when user is logged in
                             Call<UserSignup> mcall = minterface.mupdate_user(response.body().getResults().getUserId(),1);

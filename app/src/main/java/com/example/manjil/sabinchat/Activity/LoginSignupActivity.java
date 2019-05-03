@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.manjil.sabinchat.Fragment.Login;
+import com.example.manjil.sabinchat.Fragment.VerifyPin;
 import com.example.manjil.sabinchat.R;
 
 /**

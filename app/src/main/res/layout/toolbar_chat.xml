@@ -14,8 +14,9 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:id="@+id/mtolbarimageview"
         android:layout_marginLeft="11.7dp"
-        android:src="@drawable/manji" />
+        android:src="@drawable/p_file" />
 
     <TextView
         android:id="@+id/mtextview_activitytitle"
