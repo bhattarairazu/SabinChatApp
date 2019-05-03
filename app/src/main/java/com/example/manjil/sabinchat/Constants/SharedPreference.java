@@ -39,6 +39,7 @@ public class SharedPreference {
 
     public static final String KEY_GROUP = null;
     public static final String KEY_VERIYUSERNAME = null;
+    public static final String KEY_STORIES = null;
 
     // Constructor
     public SharedPreference(Context context){
@@ -64,6 +65,15 @@ public class SharedPreference {
 
         // commit changes
         editor.commit();
+    }
+    //setting stories images
+    public void set_stories_picture(String pic){
+        editor.putString(KEY_STORIES,pic);
+        editor.commit();
+    }
+    //getting stories
+    public String get_Stories(){
+        return pref.getString(KEY_STORIES,null);
     }
 
     public void setusername(String uname,String pictures){

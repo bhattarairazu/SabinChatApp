@@ -36,6 +36,7 @@ public class CreateGroupChat_Adapter extends BaseAdapter implements Filterable {
     ValueFilter mfilters = new ValueFilter();
     SharedPreference mshared;
     RetroInterface minterfaces;
+    int uids;
     public CreateGroupChat_Adapter(List<Resultss> mpeople_list, Context mcontext) {
         this.mpeople_list = mpeople_list;
         this.mcontext = mcontext;
@@ -72,9 +73,13 @@ public class CreateGroupChat_Adapter extends BaseAdapter implements Filterable {
 
         if(mgetsingleitems.getStatus()==1){
             mview.setVisibility(View.VISIBLE);
-
+            try{
+                uids = mshared.getuserids();
+            }catch (ClassCastException ex){
+                Log.d(TAG, "getView: class cast exception"+ex.toString());
+            }
             //setting data to respective view
-            if(mgetsingleitems.getId()!=mshared.getuserids()){
+            if(mgetsingleitems.getId()!=uids){
                 mlistpeope.setText(mgetsingleitems.getUsername());
                 if(mgetsingleitems.getPicture()!=null) {
                     Picasso.get().load(ApiClient.BASE_URL+mgetsingleitems.getPicture()).into(mimageiewpeople);

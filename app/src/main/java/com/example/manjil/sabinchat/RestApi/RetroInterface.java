@@ -2,6 +2,7 @@ package com.example.manjil.sabinchat.RestApi;
 
 import com.example.manjil.sabinchat.Model.Model_messagelist;
 import com.example.manjil.sabinchat.Model.UserSignup;
+import com.example.manjil.sabinchat.Model.stories.Model_stories;
 import com.example.manjil.sabinchat.Model.user_list.Userlists;
 
 import org.json.JSONObject;
@@ -91,6 +92,13 @@ public interface RetroInterface {
     @GET("pin/verify/{username}/{pin}")
     Call<UserSignup> verifypin(@Path("username") String username,@Path("pin") int pin);
 
+    //get stories of the user
+    @GET("story/get/{user_id}")
+    Call<Model_stories> mgetstories(@Path("user_id") int user_id);
+    //add stories of the user
+    @Multipart
+    @POST("story/add/{user_id}")
+    Call<UserSignup> maddtostory(@Path("user_id") int user_id,@Part MultipartBody.Part file);
 
 
 

@@ -26,6 +26,7 @@
         <activity android:name=".Activity.Activity_GroupChat"
             android:windowSoftInputMode="stateHidden"
             />
+        <activity android:name=".Activity.Stories"/>
     </application>
 
 </manifest>

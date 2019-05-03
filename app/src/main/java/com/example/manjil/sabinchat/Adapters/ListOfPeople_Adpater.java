@@ -37,6 +37,9 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
     private Context mcontext;
     private ValueFilter mfilters = new ValueFilter();
     SharedPreference mshared;
+    int uids;
+
+
     //constructor
 
     public ListOfPeople_Adpater(List<Resultss> mpeople_list, Context mcontext) {
@@ -75,7 +78,12 @@ public class ListOfPeople_Adpater extends BaseAdapter implements Filterable {
             mview.setVisibility(View.VISIBLE);
 
               //setting data to respective view
-              if(mgetsingleitems.getId()!=mshared.getuserids()){
+              try{
+                 uids = mshared.getuserids();
+              }catch (ClassCastException ex){
+                  Log.d(TAG, "getView: no userid found which is int"+ex.toString());
+              }
+              if(mgetsingleitems.getId()!=uids){
                   mlistpeope.setText(mgetsingleitems.getUsername());
                   if(mgetsingleitems.getPicture()!=null) {
                       Picasso.get().load(ApiClient.BASE_URL+mgetsingleitems.getPicture()).into(mimageiewpeople);

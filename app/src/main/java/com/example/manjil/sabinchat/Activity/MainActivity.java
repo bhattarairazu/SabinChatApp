@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +19,8 @@ import com.example.manjil.sabinchat.Constants.SharedPreference;
 import com.example.manjil.sabinchat.Fragment.Chat_Profile;
 import com.example.manjil.sabinchat.Fragment.ListOfPeople;
 import com.example.manjil.sabinchat.Fragment.Settingfragment;
+import com.example.manjil.sabinchat.Model.stories.Model_stories;
+import com.example.manjil.sabinchat.Model.stories.Results_stories;
 import com.example.manjil.sabinchat.Model.user_list.Resultss;
 import com.example.manjil.sabinchat.Model.user_list.Userlists;
 import com.example.manjil.sabinchat.R;
@@ -26,6 +29,9 @@ import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 import com.example.manjil.sabinchat.RestApi.ApiClient;
 import com.example.manjil.sabinchat.RestApi.RetroInterface;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
     SharedPreference msharedpreferene;
     RetroInterface minterface;
     ImageView tolbarimageview;
+    List<Results_stories> mstorieslist = new ArrayList<>();
+    LinearLayout mstorieslayout;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -78,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
 //        BottomNavigationViewHelper.disableShiftMode(bottom_navigation);
         try{
             userids = msharedpreferene.getuserids();
-        }catch (NullPointerException ex){
+        }catch (ClassCastException ex){
             Log.d(TAG, "onCreate: getting user ids exception"+ex.toString());
         }
         initview();
@@ -88,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
     }
     public void initview(){
         mtextviewtitle =(TextView) findViewById(R.id.mtextview_activitytitle);
+
     }
     @Override
     public void onBackPressed() {
@@ -147,6 +156,32 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
             }
         });
     }
+    public void getting_stories(){
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+        Call<Model_stories> mstories = minterface.mgetstories(msharedpreferene.getuserids());
+        mstories.enqueue(new Callback<Model_stories>() {
+            @Override
+            public void onResponse(Call<Model_stories> call, Response<Model_stories> response) {
+                if(response.isSuccessful()){
+                    for(int i = 0;i<response.body().getResult().size();i++){
+                        Results_stories mstores= new Results_stories();
+                        mstores.setId(response.body().getResult().get(i).getId());
+                        mstores.setImage(response.body().getResult().get(i).getImage());
+                        mstores.setText(response.body().getResult().get(i).getText());
+                        mstores.setUser_id(response.body().getResult().get(i).getUser_id());
+                        mstores.setCreated_at(response.body().getResult().get(i).getCreated_at());
+                        mstorieslist.add(mstores);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Model_stories> call, Throwable t) {
+                Log.d(TAG, "onFailure: error"+t.toString());
+            }
+        });
+    }
+
 }
 
 
