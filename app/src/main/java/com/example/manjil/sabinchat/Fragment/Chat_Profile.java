@@ -475,7 +475,7 @@ public class Chat_Profile extends Fragment {
         MultipartBody.Part body = MultipartBody.Part.createFormData("image",mfile.getName(),filereqbody);
 
         minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
-        Call<UserSignup> mupdate_image = minterface.maddtostory(14,body);
+        Call<UserSignup> mupdate_image = minterface.maddtostory(uid,body);
         mupdate_image.enqueue(new Callback<UserSignup>() {
             @Override
             public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {

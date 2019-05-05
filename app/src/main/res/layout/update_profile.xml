@@ -69,31 +69,31 @@
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/roundwhite">
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_marginLeft="30dp"-->
+        <!--android:layout_marginRight="30dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:background="@drawable/roundwhite">-->
 
 
 
-        <custom_font.MyEditText
-            android:id="@+id/current_password"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#00000000"
-            android:paddingLeft="10dp"
-            android:hint="Current Password"
-            android:textColor="#fff"
-            android:textColorHint="#fff"
-            android:drawablePadding="20dp"
-            android:textSize="13dp"
-            />
-    </LinearLayout>
+        <!--<custom_font.MyEditText-->
+            <!--android:id="@+id/current_password"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:background="#00000000"-->
+            <!--android:paddingLeft="10dp"-->
+            <!--android:hint="Current Password"-->
+            <!--android:textColor="#fff"-->
+            <!--android:textColorHint="#fff"-->
+            <!--android:drawablePadding="20dp"-->
+            <!--android:textSize="13dp"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

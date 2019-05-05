@@ -117,12 +117,12 @@ public class Settingfragment extends Fragment {
         malertidalogeus = new AlertDialog.Builder(getContext()).create();
         //malertidalogeus.requestWindowFeature(Window.FEATURE_NO_TITLE);
         View mview =getLayoutInflater().inflate(R.layout.update_profile,null);
-        final EditText meditext_current = (EditText) mview.findViewById(R.id.current_password);
+        //final EditText meditext_current = (EditText) mview.findViewById(R.id.current_password);
         final EditText meditextname = (EditText) mview.findViewById(R.id.names);
         meditextname.setText(mshared.getusername());
         meditext_newpassword = (EditText) mview.findViewById(R.id.new_password);
 
-        EditText meditext_confirm = (EditText) mview.findViewById(R.id.new_passwordconfirm);
+        final EditText meditext_confirm = (EditText) mview.findViewById(R.id.new_passwordconfirm);
 
         TextView meditext_setpassword = (TextView) mview.findViewById(R.id.setpassword);
        mimageview = (ImageView) mview.findViewById(R.id.photo_profile);
@@ -141,7 +141,7 @@ public class Settingfragment extends Fragment {
             public void onClick(View v) {
                 String names = meditextname.getText().toString();
                 String newpassword = meditext_newpassword.getText().toString();
-
+                String conformpasswords = meditext_confirm.getText().toString();
                 if(selectimage && !TextUtils.isEmpty(names)){
 
                     updatename_toserver(names);
@@ -158,11 +158,21 @@ public class Settingfragment extends Fragment {
                     meditextname.setError("Name Required");
                     return;
                 }
-
-                if(!TextUtils.isEmpty(newpassword)){
-                    update_oldpassword(newpassword);
-
+                if(TextUtils.isEmpty(newpassword)){
+                    meditext_newpassword.setError("Required");
+                    return;
                 }
+                if(TextUtils.isEmpty(conformpasswords)){
+                    meditext_confirm.setError("Required");
+                    return;
+                }
+                if(newpassword.matches(conformpasswords)){
+                    update_oldpassword(newpassword);
+                }else{
+                    meditext_confirm.setError("Password Doesn't Match with password you type! Please Type the Corect Password");
+                    return;
+                }
+
 
 
             }
@@ -220,7 +230,8 @@ public class Settingfragment extends Fragment {
         MultipartBody.Part body = MultipartBody.Part.createFormData("image",mfile.getName(),filereqbody);
 
         minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
-        Call<UserSignup> mupdate_image = minterface.update_profileimage(body);
+        Log.d(TAG, "updatePicture_toserver: userpictures"+mshared.getuserids());
+        Call<UserSignup> mupdate_image = minterface.update_profileimage(mshared.getuserids(),body);
         mupdate_image.enqueue(new Callback<UserSignup>() {
             @Override
             public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {

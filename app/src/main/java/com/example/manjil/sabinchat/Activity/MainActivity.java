@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
     ImageView tolbarimageview;
     List<Results_stories> mstorieslist = new ArrayList<>();
     LinearLayout mstorieslayout;
+    int count = 0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -79,7 +80,6 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         msharedpreferene = new SharedPreference(this);
-        get_userslist();
         tolbarimageview =(ImageView) findViewById(R.id.mtolbarimageview);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
         mContext = this;
         if( savedInstanceState == null )
             changeFragment(new Chat_Profile());
+        get_userslist();
+
     }
     public void initview(){
         mtextviewtitle =(TextView) findViewById(R.id.mtextview_activitytitle);
@@ -100,6 +102,11 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
     }
     @Override
     public void onBackPressed() {
+        count++;
+        if(count==4){
+            finish();
+        }
+
         if(getSupportFragmentManager().getBackStackEntryCount()>1){
             getSupportFragmentManager().popBackStack();
         }else{
@@ -128,24 +135,36 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
     //getting all users data
     public void get_userslist(){
         minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
-        Call<Userlists> mgetlist_user = minterface.mgetuser_list();
+        Call<Userlists> mgetlist_user = minterface.mgetuser_list_single(userids);
         mgetlist_user.enqueue(new Callback<Userlists>() {
             @Override
             public void onResponse(Call<Userlists> call, Response<Userlists> response) {
                 if(response.isSuccessful()){
-                    if(response.code()==200){
-                        for(int i =0;i<response.body().getResults().size();i++){
-                            Resultss mresult = new Resultss();
-                            if(response.body().getResults().get(i).getId()==userids) {
-                                msharedpreferene.setusername(response.body().getResults().get(i).getUsername(),response.body().getResults().get(i).getPicture());
-                                Log.d(TAG, "onResponse: usernames set");
-                                Picasso.get().load(ApiClient.BASE_URL+response.body().getResults().get(i).getPicture()).into(tolbarimageview);
-                            }
-
-                        }
+//                    for(int i = 0 ;i<response.body().getResults().size();i++){
+//                        Log.d(TAG, "onResponse: "+response.body().getResults().get(i).getUsername());
+//
+//                    }
+                    msharedpreferene.setusername(response.body().getResults().get(0).getUsername(),response.body().getResults().get(0).getPicture());
+                    Picasso.get().load(ApiClient.BASE_URL+msharedpreferene.getpitures()).into(tolbarimageview);
 
 
-                    }
+//                   String pic = response.body().getResults().get(0).getPicture();
+//                   String name  = response.body().getResults().get(0).getUsername();
+//                    Log.d(TAG, "onResponse: pictures i s"+ pic);
+//                    Log.d(TAG, "onResponse: usernames is"+name);
+                   //if(response.code()==200){
+                       // for(int i =0;i<response.body().getResults().size();i++){
+//                            Resultss mresult = new Resultss();
+//                           // if(response.body().getResults().get(i).getId()==userids) {
+//                                msharedpreferene.setusername(response.body().getResults().get(i).getUsername(),response.body().getResults().get(i).getPicture());
+//                                Log.d(TAG, "onResponse: usernames set"+response.body().getResults().get(i).getPicture()+"userids"+userids);
+//                                Picasso.get().load(ApiClient.BASE_URL+response.body().getResults().get(i).getPicture()).into(tolbarimageview);
+//                           // }
+
+                     //   }
+
+
+                    //}
                 }
             }
 

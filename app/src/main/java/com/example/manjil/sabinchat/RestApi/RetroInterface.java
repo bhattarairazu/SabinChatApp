@@ -46,6 +46,9 @@ public interface RetroInterface {
     //getting all users
     @GET("user/all")
     Call<Userlists> mgetuser_list();
+    //getting all users
+    @GET("user/{user_id}")
+    Call<Userlists> mgetuser_list_single(@Path("user_id") int user_id);
 
     //updating user status
     @GET("user/update/status/{user_id}/{status}")
@@ -62,8 +65,8 @@ public interface RetroInterface {
 
     //updating user images
     @Multipart
-    @POST("update/picture/14")
-    Call<UserSignup> update_profileimage(@Part MultipartBody.Part file);
+    @POST("update/picture/{user_id}")
+    Call<UserSignup> update_profileimage(@Path("user_id") int user_id,@Part MultipartBody.Part file);
 
 //updating userpassword
     @FormUrlEncoded

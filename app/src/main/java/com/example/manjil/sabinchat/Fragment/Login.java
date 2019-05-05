@@ -58,6 +58,7 @@ public class Login extends Fragment {
         msharedpreferece = new SharedPreference(getContext());
         if(msharedpreferece.isLoggedIn()){
             startActivity(new Intent(getContext(), MainActivity.class));
+            getActivity().finish();
         }
         initviews(mview);
         setuponclicklisteners();
@@ -137,6 +138,7 @@ public class Login extends Fragment {
                             mdialog.dismiss();
                             SharedPreference.user_ids = response.body().getResults().getUserId();
                             startActivity(new Intent(getContext(), MainActivity.class));
+                            getActivity().finish();
                         }else{
                             mdialog.dismiss();
                             Toast.makeText(getContext(), response.body().getResults().getMsg(), Toast.LENGTH_SHORT).show();
