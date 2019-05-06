@@ -112,6 +112,8 @@ public class Login extends Fragment {
                     if(response.code()==200 && response.message().equals("OK")){
                         status = response.body().getResults().getStatus();
                         if(status){
+                            Log.d(TAG, "onResponse: userid after login session"+response.body().getResults().getUserId());
+                                msharedpreferece.setuserids(response.body().getResults().getUserId());
                                 msharedpreferece.createLoginSession(una,response.body().getResults().getUserId(),1,"");
                             //updating user online status
                             //setting online status to true when user is logged in

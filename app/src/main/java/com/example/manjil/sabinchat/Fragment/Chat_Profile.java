@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -51,6 +52,8 @@ import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.Interfaces.Title_Text_Listeners;
 import com.example.manjil.sabinchat.RestApi.ApiClient;
 import com.example.manjil.sabinchat.RestApi.RetroInterface;
+import com.example.manjil.sabinchat.Room.AppDatabase;
+import com.example.manjil.sabinchat.Room.Latestmessage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,7 +78,7 @@ public class Chat_Profile extends Fragment {
     private String [] dates ={"6:45 AM","5:41 am","6:45 AM","7:56 PM","6:45 AM","5:41 am","6:45 AM","7:56 PM"};
     private int [] totlamessages = {5,8,12,4,3,6,1,2};
     private int [] user_id = {1,2,3,4,5,6,7,8};
-
+    List<Latestmessage> mgetmessagelist = new ArrayList<>();
     //setarch edit text
     private EditText msearacheditext;
     private ListView mlistviews;
@@ -126,6 +129,7 @@ public class Chat_Profile extends Fragment {
         laodadapterdata();
         loadall_online_user();
         onclicklisteners();
+        getLatestMessage();
        // getting_stories();
         return mview;
     }
@@ -156,27 +160,27 @@ public class Chat_Profile extends Fragment {
 
 
 
-        for(int j = 0;j<mlistnames.length;j++){
-            Model_HomeChat mhome = new Model_HomeChat();
-            mhome.setDate(dates[j]);
-            mhome.setName(mlistnames[j]);
-            mhome.setLast_message(lastunseen_messages[j]);
-            mhome.setOnline_status(onlinesatus[j]);
-            mhome.setNo_of_unseenmessages(totlamessages[j]);
-            mhome.setUserids(user_id[j]);
-            mhomechatlisst.add(mhome);
-
-        }
-        madpters = new Custom_chathome_Adpater(mhomechatlisst,getContext());
-        mlistviews.setAdapter(madpters);
-        //listview setonclick listeners
+//        for(int j = 0;j<mlistnames.length;j++){
+//            Model_HomeChat mhome = new Model_HomeChat();
+//            mhome.setDate(dates[j]);
+//            mhome.setName(mlistnames[j]);
+//            mhome.setLast_message(lastunseen_messages[j]);
+//            mhome.setOnline_status(onlinesatus[j]);
+//            mhome.setNo_of_unseenmessages(totlamessages[j]);
+//            mhome.setUserids(user_id[j]);
+//            mhomechatlisst.add(mhome);
+//
+//        }
+//        madpters = new Custom_chathome_Adpater(mhomechatlisst,getContext());
+//        mlistviews.setAdapter(madpters);
+//        //listview setonclick listeners
         mlistviews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //String names = parent.getItemAtPosition(position).toString();
-                String names = mhomechatlisst.get(position).getName();
-                int userids = mhomechatlisst.get(position).getUserids();
-                Log.d(TAG, "onItemClick: names of respected list items"+names);
+                String names = mgetmessagelist.get(position).getUsername();
+                int userids = mgetmessagelist.get(position).getUser_ids();
+                Log.d(TAG, "onItemClick: names of respected list items"+names+"userids is"+userids);
                 startActivity(new Intent(view.getContext(), SingleChat.class).putExtra("name",names).putExtra("userid",userids));
             }
         });
@@ -227,7 +231,7 @@ public class Chat_Profile extends Fragment {
                     public void onClick(View v) {
                         msearacheditext.setText("");
                         searchimageview.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
-                        madpters = new Custom_chathome_Adpater(mhomechatlisst,getContext());
+                        madpters = new Custom_chathome_Adpater(mgetmessagelist,getContext());
                         mlistviews.setAdapter(madpters);
                         madpters.notifyDataSetChanged();
                     }
@@ -282,9 +286,9 @@ public class Chat_Profile extends Fragment {
         malert.show();
     }
     public void create_group_withname(final String groupname){
-        int uids = 0;
+        final int  uids = msharedpreferences.getuserids();
         try{
-            uids = msharedpreferences.getuserids();
+
             //uids = Integer.parseInt(uids);
         }catch (ClassCastException ex){
             Log.d(TAG, "create_group_withname: class cast exception"+ex.toString());
@@ -298,10 +302,10 @@ public class Chat_Profile extends Fragment {
                 if(response.isSuccessful()){
                     if(response.body().getResults().getStatus()){
                         Toast.makeText(getContext(), "Group Created", Toast.LENGTH_SHORT).show();
-                        Model_HomeChat mhomechat = new Model_HomeChat();
-                        mhomechat.setName(groupname);
-                        mhomechatlisst.add(mhomechat);
-                        madpters = new Custom_chathome_Adpater(mhomechatlisst,getContext());
+                        Latestmessage mhomechat = new Latestmessage(groupname,"Click Here to Send Message to the group",0,uids,msharedpreferences.getuserids());
+                       // mhomechat.setName(groupname);
+                        mgetmessagelist.add(mhomechat);
+                        madpters = new Custom_chathome_Adpater(mgetmessagelist,getContext());
                         mlistviews.setAdapter(madpters);
 
                         int group_ids = response.body().getResults().getGroupId();
@@ -493,6 +497,29 @@ public class Chat_Profile extends Fragment {
                 Log.d(TAG, "onFailure: failed"+t.toString());
             }
         });
+    }
+    //getting data from room database
+    private void getLatestMessage(){
+        class GetLatestMessage extends AsyncTask<Void,Void,List<Latestmessage>>{
+
+            @Override
+            protected List<Latestmessage> doInBackground(Void... voids) {
+               mgetmessagelist =  AppDatabase.getInstance(getContext()).lmessagedao().getMessageList(msharedpreferences.getuserids());
+
+
+                return mgetmessagelist;
+            }
+
+            @Override
+            protected void onPostExecute(List<Latestmessage> latestmessages) {
+                super.onPostExecute(latestmessages);
+                madpters = new Custom_chathome_Adpater(latestmessages,getContext());
+                mlistviews.setAdapter(madpters);
+
+            }
+        }
+        GetLatestMessage mla = new GetLatestMessage();
+        mla.execute();
     }
 
 

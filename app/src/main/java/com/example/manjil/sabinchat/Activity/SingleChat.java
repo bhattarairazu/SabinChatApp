@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -40,6 +41,9 @@ import com.example.manjil.sabinchat.Model.UserSignup;
 import com.example.manjil.sabinchat.R;
 import com.example.manjil.sabinchat.RestApi.ApiClient;
 import com.example.manjil.sabinchat.RestApi.RetroInterface;
+import com.example.manjil.sabinchat.Room.AppDatabase;
+import com.example.manjil.sabinchat.Room.LastMessageDao;
+import com.example.manjil.sabinchat.Room.Latestmessage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -63,6 +67,7 @@ public class SingleChat extends AppCompatActivity{
     private TextView mtextview_name;
     private EditText meditext_typemessage;
     private Button mbtn_sends;
+    List<Latestmessage> mgetmessagelist = new ArrayList<>();
     //initilization datas
     private ListView mlisview_messagse;
     private Custom_SingleMessage_Adapter madapter;
@@ -74,10 +79,13 @@ public class SingleChat extends AppCompatActivity{
     Uri selectedImage;
     private Bitmap mbitmap;
     boolean sendimage = false;
+    SharedPreference msharedpreference;
+    String names_singleu;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_home);
+        msharedpreference = new SharedPreference(this);
         //initn views
         initviews();
         //setting onclick listeners on image view
@@ -92,6 +100,8 @@ public class SingleChat extends AppCompatActivity{
         }catch (NullPointerException ex){
             Log.d(TAG, "onCreate: catch null exception"+ex.toString());
         }
+        getting_singleusername(userids);
+
         getmessage_fromserver();
         }
 
@@ -117,14 +127,17 @@ public class SingleChat extends AppCompatActivity{
 
         }
         public void getmessage_fromserver(){
+            final String[] message_latest = {null};
                 minterface =ApiClient.getAPICLIENT().create(RetroInterface.class);
-            Call<Model_messagelist> mgetlist = minterface.mgetmessagelist(SharedPreference.user_ids,userids);
+            Call<Model_messagelist> mgetlist = minterface.mgetmessagelist(msharedpreference.getuserids(),userids);
+            Log.d(TAG, "getmessage_fromserver: userids_home"+msharedpreference.getuserids()+"useridsother"+userids);
             mgetlist.enqueue(new Callback<Model_messagelist>() {
                 @Override
                 public void onResponse(Call<Model_messagelist> call, Response<Model_messagelist> response) {
                     if(response.isSuccessful()){
                         for(int i = response.body().getResults().size()-1;i>=0;i--){
                                 String message = response.body().getResults().get(i).getMessage();
+                                message_latest[0] = message;
                                 int id = response.body().getResults().get(i).getId();
                                 int from_id = response.body().getResults().get(i).getFrom_id();
                                 int to_id = response.body().getResults().get(i).getTo_id();
@@ -135,7 +148,18 @@ public class SingleChat extends AppCompatActivity{
                                 mlistmodel.add(mmessage_single);
                         }
 
-                                madapter = new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,SharedPreference.user_ids);
+
+//                        try{
+//                        if(!names.matches(names_singleu)){
+//                            savelatestmessage(message_latest[0],userids);
+//                            Log.d(TAG, "onResponse: single names"+names_singleu);
+//
+//                        }
+//                        }catch (NullPointerException ex){
+//                            Log.d(TAG, "onResponse: exception"+ex.toString());
+//                        }
+
+                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(),mlistmodel,msharedpreference.getuserids());
 
                         mlisview_messagse.setAdapter(madapter);
                     }
@@ -185,7 +209,11 @@ public class SingleChat extends AppCompatActivity{
 //                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
 //                        mlisview_messagse.setAdapter(madapter);
 //                        madapter.notifyDataSetChanged();
-                        sendmessage_toserver_withimages(messages, SharedPreference.user_ids, userids);
+                        if(names_singleu==null){
+                            Log.d(TAG, "onResponse: inside conditions");
+                            savelatestmessage(messages,userids);
+                        }
+                        sendmessage_toserver_withimages(messages, msharedpreference.getuserids(), userids);
                         sendimage = false;
 
                     }else{
@@ -195,7 +223,11 @@ public class SingleChat extends AppCompatActivity{
 //                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
 //                        mlisview_messagse.setAdapter(madapter);
 //                        madapter.notifyDataSetChanged();
-                        sendmessage_toserver_withoutimages(messages, SharedPreference.user_ids, userids);
+                        if(names_singleu==null){
+                            Log.d(TAG, "onResponse: inside conditions");
+                            savelatestmessage(messages,userids);
+                        }
+                        sendmessage_toserver_withoutimages(messages, msharedpreference.getuserids(), userids);
                     }
                     meditext_typemessage.setText("");
 
@@ -398,4 +430,43 @@ public class SingleChat extends AppCompatActivity{
                 .show();
     }
 
+    private void savelatestmessage(final String message,final int userid) {
+
+        //room database inserting username and images
+        class SaveLatestmessge extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                //creating a new task
+                Latestmessage mlate = new Latestmessage(names,message,userid,0,msharedpreference.getuserids());
+                AppDatabase.getInstance(getApplicationContext()).lmessagedao().inserLastmessage(mlate);
+
+                return null;
+            }
+
+        }
+        SaveLatestmessge mmessages = new SaveLatestmessge();
+        mmessages.execute();
+
+    }
+    private void getting_singleusername(final int uids){
+        class Getsingleuname extends AsyncTask<Void,Void,List<Latestmessage>>{
+
+            @Override
+            protected List<Latestmessage> doInBackground(Void... voids) {
+              // names_singleu = AppDatabase.getInstance(getApplicationContext()).lmessagedao().getting_single_username();
+                names_singleu  = AppDatabase.getInstance(getApplicationContext()).lmessagedao().getsingleusername(uids,msharedpreference.getuserids());
+               // mgetmessagelist = AppDatabase.getInstance(getApplicationContext()).lmessagedao().getting_single_username(uids);
+
+                Log.d(TAG, "doInBackground: inside asynctask"+names_singleu);
+                return mgetmessagelist;
+            }
+
+
+
+        }
+        Getsingleuname msinl = new Getsingleuname();
+        msinl.execute();
+    }
 }

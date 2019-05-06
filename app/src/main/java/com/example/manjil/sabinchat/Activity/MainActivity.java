@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
 //        BottomNavigationViewHelper.disableShiftMode(bottom_navigation);
         try{
             userids = msharedpreferene.getuserids();
+            Log.d(TAG, "onCreate: user ids is"+userids);
         }catch (ClassCastException ex){
             Log.d(TAG, "onCreate: getting user ids exception"+ex.toString());
         }
@@ -140,12 +141,12 @@ public class MainActivity extends AppCompatActivity implements Title_Text_Listen
             @Override
             public void onResponse(Call<Userlists> call, Response<Userlists> response) {
                 if(response.isSuccessful()){
-//                    for(int i = 0 ;i<response.body().getResults().size();i++){
-//                        Log.d(TAG, "onResponse: "+response.body().getResults().get(i).getUsername());
-//
-//                    }
-                    msharedpreferene.setusername(response.body().getResults().get(0).getUsername(),response.body().getResults().get(0).getPicture());
-                    Picasso.get().load(ApiClient.BASE_URL+msharedpreferene.getpitures()).into(tolbarimageview);
+                    for(int i = 0 ;i<response.body().getResults().size();i++){
+                        Log.d(TAG, "onResponse: "+response.body().getResults().get(i).getUsername());
+                        msharedpreferene.setusername(response.body().getResults().get(0).getUsername(),response.body().getResults().get(0).getPicture());
+                        Picasso.get().load(ApiClient.BASE_URL+msharedpreferene.getpitures()).into(tolbarimageview);
+
+                    }
 
 
 //                   String pic = response.body().getResults().get(0).getPicture();

@@ -190,6 +190,7 @@ public class Settingfragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         mshared.logoutUser();
+                        logotu();
                         startActivity(new Intent(getView().getContext(),LoginSignupActivity.class));
 
                     }
@@ -197,6 +198,28 @@ public class Settingfragment extends Fragment {
                 .setNegativeButton("No",null)
                 .show();
     }
+    //logout status update
+public void logotu(){
+        minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
+    Call<UserSignup> mcall = minterface.mupdate_user(mshared.getuserids(),1);
+    mcall.enqueue(new Callback<UserSignup>() {
+        @Override
+        public void onResponse(Call<UserSignup> call, Response<UserSignup> response) {
+            if(response.isSuccessful()){
+                if(response.body().getResults().getStatus()){
+                    Log.d(TAG, "onResponse: user status updated successfully");
+
+                }
+            }
+        }
+
+        @Override
+        public void onFailure(Call<UserSignup> call, Throwable t) {
+            Log.d(TAG, "onFailure: user status update failed"+t.toString());
+
+        }
+    });
+}
     public void update_oldpassword(String password_news){
         minterface = ApiClient.getAPICLIENT().create(RetroInterface.class);
         Call<UserSignup> mupdate = minterface.update_password(mshared.getusername(),password_news);

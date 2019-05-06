@@ -40,6 +40,7 @@ public class SharedPreference {
     public static final String KEY_GROUP = null;
     public static final String KEY_VERIYUSERNAME = null;
     public static final String KEY_STORIES = null;
+    public static final String KEY_USERIDS = null;
 
     // Constructor
     public SharedPreference(Context context){
@@ -81,7 +82,10 @@ public class SharedPreference {
         editor.putString(KEY_PICTURE,pictures);
         editor.commit();
     }
-
+    public void setuserids(int uuids){
+        editor.putInt(KEY_USERIDS,uuids);
+        editor.commit();
+    }
     public void set_groupid(int groupid){
         editor.putInt(KEY_GROUP,groupid);
         editor.commit();
@@ -117,6 +121,9 @@ public class SharedPreference {
 //    }
     public int getuserids(){
         return pref.getInt(KEY_USERID,0);
+    }
+    public int getuids(){
+        return pref.getInt(KEY_USERIDS,0);
     }
 
     public String getpitures(){
