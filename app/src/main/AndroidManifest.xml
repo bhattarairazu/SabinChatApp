@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.manjil.sabinchat">
+    package="com.example.manjil.sabinchats">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
@@ -12,21 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.LoginSignupActivity">
+        <activity android:name="com.example.manjil.sabinchats.Activity.LoginSignupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity"
+        <activity android:name="com.example.manjil.sabinchats.Activity.MainActivity"
             android:windowSoftInputMode="stateHidden"
             />
-        <activity android:name=".Activity.SingleChat"/>
-        <activity android:name=".Activity.Activity_GroupChat"
+        <activity android:name="com.example.manjil.sabinchats.Activity.SingleChat"/>
+        <activity android:name="com.example.manjil.sabinchats.Activity.Activity_GroupChat"
             android:windowSoftInputMode="stateHidden"
             />
-        <activity android:name=".Activity.Stories"/>
+        <activity android:name="com.example.manjil.sabinchats.Activity.Stories"/>
     </application>
 
 </manifest>
