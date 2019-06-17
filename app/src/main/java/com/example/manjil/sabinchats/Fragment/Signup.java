@@ -103,8 +103,9 @@ public class Signup extends Fragment {
     }
     private boolean validate() {
         boolean validate = false;
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         name = medittext_name.getText().toString();
-        email =meditext_email.getText().toString();
+        email =meditext_email.getText().toString().trim();
         confirmpassword =medittext_confirmpassword.getText().toString();
         username = meditext_username.getText().toString();
         password = meditext_password.getText().toString();
@@ -121,9 +122,18 @@ public class Signup extends Fragment {
         meditext_email.setError("Required");
         }else if(TextUtils.isEmpty(confirmpassword)){
             medittext_confirmpassword.setError("Required");
-        }else{
+        }else
+            {
+                if(email.matches(emailPattern)){
+                if (password.matches(confirmpassword)) {
+                    validate = true;
+                }else{
+                    medittext_confirmpassword.setError("Password Doesnot Match");
 
-            validate = true;
+                }
+                }else{
+                    meditext_email.setError("Invalid Email Address");
+                }
         }
         return validate;
     }

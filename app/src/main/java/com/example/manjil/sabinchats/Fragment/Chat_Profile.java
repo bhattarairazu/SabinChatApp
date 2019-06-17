@@ -185,7 +185,7 @@ public class Chat_Profile extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 int positions = position;
                 long ids = id;
-                onconfirm_dialogue(position,ids);
+               // onconfirm_dialogue(position,ids);
                 return true;
             }
         });
@@ -213,23 +213,28 @@ public class Chat_Profile extends Fragment {
                 alertdialogue_creategroup();
             }
         });
+
         //ediitext filter onlcick listenrs
         msearacheditext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d(TAG, "beforeTextChanged: texts"+s);
-                searchimageview.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_black_24dp));
-                madpters.getFilter().filter(s.toString());
-                searchimageview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        msearacheditext.setText("");
-                        searchimageview.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
-                        madpters = new Custom_chathome_Adpater(mgetmessagelist,getContext());
-                        mlistviews.setAdapter(madpters);
-                        madpters.notifyDataSetChanged();
-                    }
-                });
+                try {
+                    searchimageview.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_black_24dp));
+                    madpters.getFilter().filter(s.toString());
+                    searchimageview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            msearacheditext.setText("");
+                            searchimageview.setImageDrawable(getResources().getDrawable(R.drawable.ic_search));
+                            madpters = new Custom_chathome_Adpater(mgetmessagelist, getContext());
+                            mlistviews.setAdapter(madpters);
+                            madpters.notifyDataSetChanged();
+                        }
+                    });
+                }catch (NullPointerException ex){
+                    Log.d(TAG, "beforeTextChanged: Exception"+ex.toString());
+                }
 
 
             }
@@ -498,6 +503,7 @@ public class Chat_Profile extends Fragment {
 
             @Override
             protected List<Latestmessage> doInBackground(Void... voids) {
+                mgetmessagelist.clear();
                mgetmessagelist =  AppDatabase.getInstance(getContext()).lmessagedao().getMessageList(msharedpreferences.getuserids());
 
 
@@ -507,8 +513,14 @@ public class Chat_Profile extends Fragment {
             @Override
             protected void onPostExecute(List<Latestmessage> latestmessages) {
                 super.onPostExecute(latestmessages);
-                madpters = new Custom_chathome_Adpater(latestmessages,getContext());
-                mlistviews.setAdapter(madpters);
+                if(latestmessages.size()!=0){
+                    for(int i = 0;i<latestmessages.size();i++){
+                    Log.d(TAG, "onPostExecute: latest message is"+latestmessages.get(i).getLastmessage());
+                    }
+                    madpters = new Custom_chathome_Adpater(latestmessages,getContext());
+                    mlistviews.setAdapter(madpters);
+                }
+
 
             }
         }

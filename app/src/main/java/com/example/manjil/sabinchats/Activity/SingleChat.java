@@ -81,9 +81,10 @@ public class SingleChat extends AppCompatActivity{
     private Bitmap mbitmap;
     boolean sendimage = false;
     SharedPreference msharedpreference;
-    String names_singleu,pictureurl;
+    String names_singleu,pictureurl,messagess=null;
     SwipeRefreshLayout swipe;
     ImageView profilechat;
+    int fromid;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,6 +141,7 @@ public class SingleChat extends AppCompatActivity{
 
         }
         public void getmessage_fromserver(){
+
             final String[] message_latest = {null};
                 minterface =ApiClient.getAPICLIENT().create(RetroInterface.class);
             Call<Model_messagelist> mgetlist = minterface.mgetmessagelist(msharedpreference.getuserids(),userids);
@@ -149,17 +151,23 @@ public class SingleChat extends AppCompatActivity{
                 public void onResponse(Call<Model_messagelist> call, Response<Model_messagelist> response) {
                     if(response.isSuccessful()){
                         for(int i = response.body().getResults().size()-1;i>=0;i--){
-                                String message = response.body().getResults().get(i).getMessage();
-                                message_latest[0] = message;
+                                messagess = response.body().getResults().get(i).getMessage();
+                                message_latest[0] = messagess;
                                 int id = response.body().getResults().get(i).getId();
-                                int from_id = response.body().getResults().get(i).getFrom_id();
+                                fromid = response.body().getResults().get(i).getFrom_id();
                                 int to_id = response.body().getResults().get(i).getTo_id();
                                 String time = response.body().getResults().get(i).getTime();
                                 String pictures = response.body().getResults().get(i).getPicture();
                             Log.d(TAG, "onResponse: getting pictures message from server"+pictures);
-                                Model_sendingmessage mmessage_single = new Model_sendingmessage(id,message,from_id,to_id,time,selectedImage,pictures);
+                                Model_sendingmessage mmessage_single = new Model_sendingmessage(id,messagess,fromid,to_id,time,selectedImage,pictures);
                                 mlistmodel.add(mmessage_single);
 
+                        }
+                        if(names_singleu==null && messagess!=null){
+                            Log.d(TAG, "onResponse: inside conditions");
+                            savelatestmessage(messages,userids);
+                        }else{
+                            updatelatest_message(userids,messages);
                         }
                         if(swipe.isRefreshing()){
                         swipe.setRefreshing(false);
@@ -236,10 +244,7 @@ public class SingleChat extends AppCompatActivity{
 //                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
 //                        mlisview_messagse.setAdapter(madapter);
 //                        madapter.notifyDataSetChanged();
-                        if(names_singleu==null){
-                            Log.d(TAG, "onResponse: inside conditions");
-                            savelatestmessage(messages,userids);
-                        }
+
                         sendmessage_toserver_withimages(messages, msharedpreference.getuserids(), userids);
                         sendimage = false;
 
@@ -250,10 +255,7 @@ public class SingleChat extends AppCompatActivity{
 //                        madapter = new Custom_SingleMessage_Adapter(getApplicationContext(), mlistmodel, SharedPreference.user_ids);
 //                        mlisview_messagse.setAdapter(madapter);
 //                        madapter.notifyDataSetChanged();
-                        if(names_singleu==null){
-                            Log.d(TAG, "onResponse: inside conditions");
-                            savelatestmessage(messages,userids);
-                        }
+
                         sendmessage_toserver_withoutimages(messages, msharedpreference.getuserids(), userids);
                     }
                     meditext_typemessage.setText("");
@@ -477,6 +479,26 @@ public class SingleChat extends AppCompatActivity{
         mmessages.execute();
 
     }
+    //updating latest message
+    private void updatelatest_message(final int uids,final String lastmessage){
+        //room database inserting username and images
+        class UpdateLatestMessage extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                Log.d(TAG, "doInBackground: updateing"+lastmessage+"idss"+uids);
+                //creating a new task
+                Latestmessage mlate = new Latestmessage(names,lastmessage,uids,0,msharedpreference.getuserids());
+                AppDatabase.getInstance(getApplicationContext()).lmessagedao().updateLastmessage(mlate);
+
+                return null;
+            }
+
+        }
+        UpdateLatestMessage mmessages = new UpdateLatestMessage();
+        mmessages.execute();
+    }
+    //getting single username from room databse to check for latest message
     private void getting_singleusername(final int uids){
         class Getsingleuname extends AsyncTask<Void,Void,List<Latestmessage>>{
 

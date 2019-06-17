@@ -29,18 +29,18 @@
             android:src="@drawable/p_file"/>
 
 
-        <TextView
-            android:id="@+id/mtextview_totlamesaes"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="-2dp"
-            android:gravity="center"
-            android:text="3"
-            android:textSize="12sp"
-            android:textColor="@color/colorAccent"
-            android:background="@drawable/bg_unread"/>
+        <!--<TextView-->
+            <!--android:id="@+id/mtextview_totlamesaes"-->
+            <!--android:layout_width="28dp"-->
+            <!--android:layout_height="28dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginBottom="-2dp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="3"-->
+            <!--android:textSize="12sp"-->
+            <!--android:textColor="@color/colorAccent"-->
+            <!--android:background="@drawable/bg_unread"/>-->
     </RelativeLayout>
 
     <LinearLayout
@@ -84,16 +84,16 @@
                 android:layout_marginTop="3dp" />
 
 
-            <TextView
-                android:id="@+id/tv_times"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="5:04pm"
-                android:textColor="@color/colorTextBlack"
-                android:textSize="12sp"
-                android:layout_alignTop="@id/online_indicator"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+            <!--<TextView-->
+                <!--android:id="@+id/tv_times"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="5:04pm"-->
+                <!--android:textColor="@color/colorTextBlack"-->
+                <!--android:textSize="12sp"-->
+                <!--android:layout_alignTop="@id/online_indicator"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_alignParentEnd="true" />-->
         </RelativeLayout>
 
     </LinearLayout>

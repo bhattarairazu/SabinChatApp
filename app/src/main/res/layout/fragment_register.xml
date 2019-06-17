@@ -88,6 +88,7 @@
                 android:paddingLeft="10dp"
                 android:hint="Email Address"
                 android:textColor="#fff"
+                android:inputType="textEmailAddress"
                 android:textColorHint="#fff"
                 android:drawablePadding="20dp"
                 android:drawableLeft="@drawable/email"
